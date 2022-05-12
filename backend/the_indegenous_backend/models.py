@@ -17,13 +17,13 @@ class Author(models.Model):
     id = models.BigAutoField(primary_key=True)
     first_name = models.CharField(max_length=80)
     last_name = models.CharField(max_length=80)
-    country = models.OneToOneField(Country, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
 class Publisher(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=80)
-    authors = models.ForeignKey(Author, on_delete=models.CASCADE)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    authors = models.ManyToManyField(Author)
+    country = models.ManyToManyField(Country)
 
 class Book(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -32,9 +32,10 @@ class Book(models.Model):
     year = models.DateField
     description = models.CharField(max_length=200)
     pages = models.IntegerField
-    countries = models.ForeignKey(Country, on_delete=models.CASCADE)
-    language = models.OneToOneField(Language, on_delete=models.CASCADE)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
-    genre = models.OneToOneField(Genre, on_delete=models.CASCADE, related_name='bookgenre')
-    sub_genre = models.OneToOneField(Genre, on_delete=models.CASCADE, related_name='booksubgenre')
+    countries = models.ManyToManyField(Country)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    author = models.ManyToManyField(Author)
+    publisher = models.ManyToManyField(Publisher)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name='bookgenre')
+    sub_genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name='booksubgenre')
+    file = models.FileField(upload_to='Books/')
