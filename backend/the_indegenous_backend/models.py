@@ -1,6 +1,15 @@
 from django.db import models
-
+import datetime
+from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
+
+
+def current_year():
+    return datetime.date.today().year
+
+def max_value_current_year(value):
+    return MaxValueValidator(current_year())(value)
+
 class Language(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=80)
@@ -29,7 +38,7 @@ class Book(models.Model):
     id = models.BigAutoField(primary_key=True)
     isbn = models.PositiveBigIntegerField
     title = models.CharField(max_length=80)
-    year = models.DateField
+    year = models.PositiveIntegerField(default=current_year(), validators=[MinValueValidator(1), max_value_current_year])
     description = models.CharField(max_length=200)
     pages = models.IntegerField
     countries = models.ManyToManyField(Country)

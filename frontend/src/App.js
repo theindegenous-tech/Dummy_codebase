@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { BookList } from './components/booklist/booklist'
+import { useState, useEffect } from 'react';
+import { FPress } from './components/futurepress/futurepress'
+import { Books } from './components/books_landing/Books'
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,10 +23,15 @@ const drawerWidth = 339;
 
 
 // This is a function to render the tab based on its index 
-function RenderSelectedTab({ index }) {
-    console.log(index)
-    var tabArray = [<div></div>, <div></div>, <BookList />, <div></div>, <div></div>]
-    return tabArray[index]
+function RenderSelectedTab({ currentDrawerTab, setDrawerTab }) {
+    const [url, setUrl] = useState(null)
+    useEffect(()=>{
+        if(url){
+            setDrawerTab(2)
+        }
+    },[url, setDrawerTab])
+    var tabArray = [<Books setUrl={setUrl}/>, <div></div>, <FPress url={url} />, <div></div>, <div></div>]
+    return tabArray[currentDrawerTab]
 }
 
 // This is a function to return the corresponding icon to the tab
@@ -48,6 +54,7 @@ function RenderListItemButtons({ setDrawerTab, text, index }) {
                     <RenderIcon index={index} />
                 </ListItemIcon>
                 <ListItemText primaryTypographyProps={{
+                    color: '#4A4A68',
                     fontFamily: "Work Sans",
                     fontWeight: 500,
                     fontSize: "16px",
@@ -84,10 +91,10 @@ export default function App() {
                 <Toolbar />
                 <Card sx={{ border: "none", boxShadow: "None", minWidth: 240 }}>
                     <CardContent>
-                        <Typography sx={{ fontFamily: "Work Sans", fontWeight: 700, fontSize: "64px", lineHeight: "75.07px", letterSpacing: "-2%" }} gutterBottom>
+                        <Typography sx={{ color: '#0E0E2C', fontFamily: "Work Sans", fontWeight: 700, fontSize: "64px", lineHeight: "75.07px", letterSpacing: "-2%" }} gutterBottom>
                             Gyani
                         </Typography>
-                        <Typography sx={{ fontFamily: "Work Sans", fontWeight: 500, fontSize: "24px", lineHeight: "28.52px" }} component="div">
+                        <Typography sx={{ color: '#4A4A68', fontFamily: "Work Sans", fontWeight: 500, fontSize: "24px", lineHeight: "28.52px" }} component="div">
                             The Indegenous Library
                         </Typography>
                     </CardContent>
@@ -103,7 +110,7 @@ export default function App() {
                 component="main"
                 sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
             >
-                <RenderSelectedTab index={currentDrawerTab} />
+                <RenderSelectedTab currentDrawerTab={currentDrawerTab} setDrawerTab={setDrawerTab}/>
             </Box>
         </Box>
     );
