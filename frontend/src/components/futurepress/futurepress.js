@@ -55,8 +55,6 @@ function FPress({ url }) {
             });
 
             rendition.on("relocated", (location) => {
-                // console.log(location);
-
                 var next = book.package.metadata.direction === "rtl" ? document.getElementById("prev") : document.getElementById("next");
                 var prev = book.package.metadata.direction === "rtl" ? document.getElementById("next") : document.getElementById("prev");
 

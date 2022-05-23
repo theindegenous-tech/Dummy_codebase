@@ -12,12 +12,12 @@ function Books({setUrl}) {
     const[authorString, setAuthorString] = useState("")
     useEffect(()=>{
       if(authors){
-        let str=""
+        let authorFullName=""
         authors.forEach(author=>{
-          str+=author.first_name+" "+author.last_name+", "
+          authorFullName+=author.first_name+" "+author.last_name+", "
         })
-        str = str.substring(0, str.length - 2);
-        setAuthorString(str)
+        authorFullName = authorFullName.substring(0, authorFullName.length - 2);
+        setAuthorString(authorFullName)
       }
     },[authors])
     return (<div>{authorString}</div>)
@@ -27,7 +27,6 @@ function Books({setUrl}) {
     async function getAllBooks() {
       try {
         const Books = await axios.get('http://localhost:8000/library')
-        // console.log(Books.data)
         setBooks(Books.data)
       } catch (error) {
         console.log(error)
