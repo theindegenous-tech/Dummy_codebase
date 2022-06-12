@@ -1,10 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import AuthenticationFailed
-from users.models import User
-from users.api.serializers import UserSerializer
+from users.models import Personalisation, User
+from users.api.serializers import UserSerializer, PersonalisationSerializer
 import jwt, datetime
 
+# Login a user.
 @api_view(['POST'])
 def login_user(request):
     email = request.data['email']
@@ -32,6 +33,7 @@ def login_user(request):
 
     return response
 
+#Signup a user.
 @api_view(['POST'])
 def signup_user(request):
     serializer = UserSerializer(data=request.data)
@@ -39,6 +41,7 @@ def signup_user(request):
     serializer.save()
     return Response(serializer.data)
 
+# Retrieve info about whether a user is logged in or not.
 @api_view(['GET'])
 def UserView(request):
     token = request.COOKIES.get('jwt')
@@ -56,6 +59,7 @@ def UserView(request):
 
     return Response(serializer.data)
 
+# Logout a user.
 @api_view(['POST'])
 def logout_user(request):
     response = Response()
@@ -64,3 +68,38 @@ def logout_user(request):
         'message':'success'
     }
     return response
+
+# create a personalisation setting.
+@api_view(['POST'])
+def add_to_list_of_personalisation(request):
+    serializer = PersonalisationSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+#Retrieve, update or delete a personalisation setting.
+@api_view(['GET', 'PUT', 'DELETE'])
+def personalisation_detail(request, pk):
+
+    
+    try:
+        personlisation_setting = Personalisation.objects.get(pk=pk)
+    except Personalisation.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'GET':
+        serializer = PersonalisationSerializer(personlisation_setting)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = PersonalisationSerializer(personlisation_setting, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        personlisation_setting.delete()
+        return Response(status=204)
