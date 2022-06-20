@@ -43,7 +43,7 @@ def signup_user(request):
 
 # Retrieve info about whether a user is logged in or not.
 @api_view(['GET'])
-def UserView(request):
+def userView(request):
     token = request.COOKIES.get('jwt')
 
     if not token:

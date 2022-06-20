@@ -1,24 +1,49 @@
-// import axios from 'axios';
+import axios from 'axios';
 // import { useEffect, useState } from 'react';
+
+import { useState } from "react";
 
 
 // This is a function that renders the epub 
-function Auth({ option }) {
+function Auth({ option, loginPressed }) {
+
+    const [email, setEmail] = useState()
+    const [password, setPassword] = useState()
+
+    const handleEmailChange = (event) =>{
+        setEmail(event.target.value)
+    }
+    const handlePasswordChange = (event) =>{
+        setPassword(event.target.value)
+    }
+    const handleLogin=async()=>{
+        let data = await axios({
+            method: 'post',
+            url: 'http://localhost:8000/login/',
+            data: {
+              email: email,
+              password: password
+            }
+          });
+          console.log(data)
+          loginPressed(true)
+    }
     return (
         <center>
             {option ?
                 <div className='Auth'>
-                    <label for="username">Username:</label>
-                    <input id="username" name="username" />
+                    <label for="email">Email:</label>
+                    <input id="email" onChange={handleEmailChange} name="email" />
                     <label for="pwd">Password:</label>
-                    <input type="password" id="pwd" name="pwd" />
+                    <input type="password" onChange={handlePasswordChange} id="pwd" name="pwd" />
+                    <input onClick={handleLogin} type="button"></input>
                 </div> :
                 <div>
-                    <label for="username">Username:</label>
-                    <input id="username" name="username" />
-                    <label for="username">First Name:</label>
+                    <label for="email">email:</label>
+                    <input id="email" name="email" />
+                    <label for="fname">First Name:</label>
                     <input id="fname" name="fname" />
-                    <label for="username">Last Name:</label>
+                    <label for="lname">Last Name:</label>
                     <input id="lname" name="lname" />
                     <label for="pwd">Password:</label>
                     <input type="password" id="pwd" name="pwd" />

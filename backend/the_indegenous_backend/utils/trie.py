@@ -1,29 +1,75 @@
-class TrieNode:
-  def __init__(self, letter):
-    self.letter = letter
-    self.children = {}
-    self.is_end_of_word = False
+# Python3 program to demonstrate auto-complete
+# feature using Trie data structure.
+# Note: This is a basic implementation of Trie
+# and not the most optimized one.
+ 
+ 
+# Initialising one node for trie
+class TrieNode():
+    def __init__(self):
+      self.children = {}
+      self.last = False
+ 
+ 
+# Initialising the trie structure.
+class Trie():
+    def __init__(self):
+      self.k = 2
+      self.cur_k = 0
+      self.root = TrieNode()
+    
+    # Forms a trie structure with the given set of strings
+    # if it does not exists already else it merges the key
+    # into it by extending the structure as required
+    def formTrie(self, keys):
+      for key in keys:
+          self.insert(key)  # inserting one key to the trie.
+ 
+    # Inserts a key into trie if it does not exist already.
+    # And if the key is a prefix of the trie node, just
+    # marks it as leaf node.
+    def insert(self, key):
+      node = self.root
+      for a in key:
+        if not node.children.get(a):
+            node.children[a] = TrieNode()
 
-class Trie:
-  def __init__(self):
-    self.root = TrieNode("*")
-  
-  def add_word(self, word):
-    currentNode = self.root
-    for letter in word:
-      if letter not in currentNode.children:
-        currentNode.children[letter] = TrieNode(letter)
-      currentNode = currentNode.children[letter]
-    currentNode.is_end_of_word = True
-  
-  def search_word(self, word):
-    if word == "":
-      return True
-    currentNode = self.root
-    for letter in word:
-      if letter not in currentNode.children:
-        return False
-      currentNode = currentNode.children[letter]
-    return currentNode.is_end_of_word 
+        node = node.children[a]
 
+      node.last = True
+ 
+    # Method to recursively traverse the trie
+    # and return a whole word.
+    def suggestion(self, node, word):
+      if(self.cur_k > self.k):
+          return
 
+      if node.last:
+        self.cur_k+=1
+        print(word)
+
+      for a, n in node.children.items():
+        self.suggestion(n, word + a)
+ 
+    # Returns all the words in the trie whose common
+    # prefix is the given key thus listing out all
+    # the suggestions for autocomplete.
+    def printAutoSuggestions(self, key):
+      node = self.root
+      for a in key:
+        # no string in the Trie has this prefix
+        if not node.children.get(a):
+            return 0
+        node = node.children[a]
+          
+      # If prefix is present as a word, but
+      # there is no subtree below the last
+      # matching node.
+      if not node.children:
+        return -1
+
+      self.suggestion(node, key)
+      self.cur_k = 0
+      return 1
+ 
+ 
