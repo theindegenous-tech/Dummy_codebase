@@ -17,15 +17,15 @@ function Auth({ option, loginPressed }) {
         setPassword(event.target.value)
     }
     const handleLogin=async()=>{
-        let data = await axios({
+        await axios({
             method: 'post',
             url: 'http://localhost:8000/login/',
             data: {
               email: email,
               password: password
-            }
+            },
+            withCredentials:true
           });
-          console.log(data)
           loginPressed(true)
     }
     return (

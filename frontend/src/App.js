@@ -7,16 +7,19 @@ export default function App() {
     const [login, loginPressed] = React.useState(true)
     React.useEffect(() => {
         const getUser = async () => {
-            let data = await axios({
+            console.log("here")
+            let res = await axios({
                 method: 'get',
                 url: 'http://localhost:8000/user/',
+                withCredentials: true
             });
 
-            console.log(data)
-            loginPressed(false)
+            console.log(res.data)
         }
         if(login){
+            
             getUser()
+            loginPressed(false)
         }
 
     }, [login])
