@@ -82,8 +82,6 @@ def add_to_list_of_personalisation(request):
 #Retrieve, update or delete a personalisation setting.
 @api_view(['GET', 'PUT', 'DELETE'])
 def personalisation_detail(request, pk):
-
-    
     try:
         personlisation_setting = Personalisation.objects.get(pk=pk)
     except Personalisation.DoesNotExist:

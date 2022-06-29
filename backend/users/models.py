@@ -44,6 +44,8 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
+        
+
 
 # Personalisation class to store preferences
 class Personalisation(models.Model):
@@ -59,7 +61,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
-    personalisation = models.ForeignKey(Personalisation, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    personalisation = models.ForeignKey(Personalisation, on_delete=models.CASCADE, default=None , null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = UserManager()
