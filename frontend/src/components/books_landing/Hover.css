@@ -1,0 +1,36 @@
+.book_description {
+    opacity: 0;
+}
+
+.book_read_button {
+    opacity: 0;
+}
+
+.book_out:hover {
+    background-color: #EFEFFD;
+
+
+}
+
+.book_out:hover .book_desc_button {
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.4);
+}
+
+.book_out:hover .book_description {
+    opacity: 1;
+
+
+}
+
+.book_out:hover .book_read_button {
+    opacity: 1;
+    cursor: pointer;
+}
+
+@media only screen and (max-width:998px) {
+    .books_container {
+        flex-direction: column;
+        height: 2000px
+    }
+
+}
