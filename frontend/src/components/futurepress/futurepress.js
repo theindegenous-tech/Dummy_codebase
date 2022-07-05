@@ -1,16 +1,17 @@
 // import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './index.css'
-
-
-// This is a function that renders the epub 
-function FPress({ url }) {
-
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark'
+import { Navigate } from 'react-router-dom';
+function FPress({ url, bookmarkarray, setBookmarkarray,loc,setLoc }) {
+    console.log(3);
     const [currentSectionIndex, setCurrentSectionIndex] = useState(null)
     const [book, setBook] = useState(null)
-
-
-
+    const [locationn,setLocation] = useState(null);
+    const [show,setShow]=useState(true)
+    const [bookmarked,setbookmarked] = useState(false)
+    var urlbookmarkmap= new Map()
     // This is a hook that runs as soon as the page renders and a url string is recieved to the component as props
     //upon recieving it, a state variable is loaded with the book 
     useEffect(() => {
@@ -20,6 +21,13 @@ function FPress({ url }) {
             setCurrentSectionIndex(c)
             var b = window.ePub(url);
             setBook(b)
+            if(urlbookmarkmap[url]!==undefined){
+                setBookmarkarray(urlbookmarkmap[url]);
+            }
+            else{
+                setBookmarkarray([]);
+            }
+            setLoc([]);
         }
     }, [url])
 
@@ -29,8 +37,9 @@ function FPress({ url }) {
         if (book != null) {
             var rendition = book.renderTo("viewer", {
                 width: "100%",
-                height: 600,
-                spread: "always"
+                height: "100%",
+                spread: "always"               
+                
             });
             rendition.display(currentSectionIndex);
             rendition.on("rendered", (section) => {
@@ -52,9 +61,10 @@ function FPress({ url }) {
                     }
                 }
 
-            });
-
+            });   
             rendition.on("relocated", (location) => {
+                setLocation(location);
+                setShow(true);
                 var next = book.package.metadata.direction === "rtl" ? document.getElementById("prev") : document.getElementById("next");
                 var prev = book.package.metadata.direction === "rtl" ? document.getElementById("next") : document.getElementById("prev");
 
@@ -71,7 +81,7 @@ function FPress({ url }) {
                 }
 
             });
-
+            book.loaded.spine.then((spine) => { console.log(spine) });
             rendition.on("layout", (layout) => {
                 let viewer = document.getElementById("viewer");
 
@@ -83,7 +93,6 @@ function FPress({ url }) {
             });
 
             window.addEventListener("unload", () => {
-                console.log("unloading");
                 this.book.destroy();
             });
 
@@ -103,10 +112,11 @@ function FPress({ url }) {
 
                 $select.onchange = () => {
                     var index = $select.selectedIndex,
-                        url = $select.options[index].getAttribute("ref");
+                    url = $select.options[index].getAttribute("ref");
                     rendition.display(url);
                     return false;
                 };
+                
 
             });
             book.ready.then(() => {
@@ -143,13 +153,70 @@ function FPress({ url }) {
             })
         }
     }, [currentSectionIndex, book])
+    const isFound = bookmarkarray.some(element => {
+            if (locationn && element.start.cfi === locationn.start.cfi) {
+                return true;
+            }
+
+            return false;
+        });
+    const handleSubmit = (e) => {
+    
+        e.preventDefault();
+        setShow(!show);
+        var bmtitle= document.getElementById('bm').value;
+        console.log(locationn);
+        if(isFound===false){
+            const tempMyObj = Object.assign({}, locationn);
+            tempMyObj.bookmarktitle=bmtitle;
+            bookmarkarray.push(tempMyObj);
+             
+        } 
+        urlbookmarkmap[url]=bookmarkarray;
+    }
+
+        function Form() {
+          return (
+            <form onSubmit = {handleSubmit}>
+            <input id="bm" placeholder='Bookmark Title'></input>
+            <button type = 'submit'>Add Bookmark</button>
+            </form>
+          )
+        }
+
+        const RemoveBookmark=()=>{
+            setbookmarked(!bookmarked);
+            var index = bookmarkarray.findIndex(function(o){
+                return o.start.cfi === locationn.start.cfi;
+            })
+            if (index !== -1) {
+                bookmarkarray=bookmarkarray.splice(index, 1);
+            }
+            urlbookmarkmap[url]=bookmarkarray;
+        }
+        
+        function BookMark() {
+          return (
+            <div>{isFound?<BookmarkIcon onClick={RemoveBookmark}/>:<BookmarkBorderIcon onClick={()=>setShow(!show)}/>}</div>
+          )
+        }
+        
 
     return (
+        <div>
+           <div>
+
+          
+        {show?<BookMark/>:<Form /> }
+         </div>
         <div className="FPress">
             <select id="toc"></select>
+
             <div id="viewer" class="spreads"></div>
             <a id="prev" href="#prev" class="arrow">‹</a>
             <a id="next" href="#next" class="arrow">›</a>
+        </div>
+        
         </div>
     );
 }

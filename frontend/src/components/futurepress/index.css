@@ -32,12 +32,11 @@ body {
   padding: 0;
   position: relative;
   margin: 10px auto;
-  /* background: white url('ajax-loader.gif') center center no-repeat; */
   top: calc(50vh - 400px);
 }
 
-#viewer.spreads .epub-view > iframe {
-    background: white;
+#viewer.spreads .epub-view>iframe {
+  background: white;
 }
 
 #viewer.scrolled {
@@ -45,14 +44,13 @@ body {
   width: 800px;
   margin: 0 auto;
   position: relative;
-  /* background: url('ajax-loader.gif') center center no-repeat; */
   box-shadow: 0 0 4px #ccc;
   padding: 20px;
   background: white;
 }
 
-#viewer.scrolled .epub-view > iframe {
-    background: white;
+#viewer.scrolled .epub-view>iframe {
+  background: white;
 }
 
 #prev {
@@ -65,7 +63,7 @@ body {
 
 #toc {
   display: block;
-  margin: 10px auto;
+  margin: 25px auto;
 }
 
 @media (min-width: 1000px) {
@@ -73,14 +71,14 @@ body {
     position: absolute;
     width: 1px;
     border-right: 1px #000 solid;
-    height: 90%;
+    height: 100%;
     z-index: 1;
     left: 50%;
     margin-left: -1px;
     top: 5%;
     opacity: .15;
     box-shadow: -2px 0 15px rgba(0, 0, 0, 1);
-    content:  "";
+    content: "";
   }
 
   #viewer.spreads.single:after {
@@ -94,6 +92,7 @@ body {
   #next {
     right: 40px;
   }
+
 }
 
 .arrow {
@@ -119,11 +118,13 @@ body {
   color: #ccc;
 }
 
-.arrow:hover, .navlink:hover {
+.arrow:hover,
+.navlink:hover {
   color: #777;
 }
 
-.arrow:active, .navlink:hover {
+.arrow:active,
+.navlink:hover {
   color: #000;
 }
 
@@ -142,9 +143,9 @@ body {
   width: 480px;
   height: 660px;
   margin: -30px auto;
-  -moz-box-shadow:      inset 10px 0 20px rgba(0,0,0,.1);
-  -webkit-box-shadow:   inset 10px 0 20px rgba(0,0,0,.1);
-  box-shadow:           inset 10px 0 20px rgba(0,0,0,.1);
+  -moz-box-shadow: inset 10px 0 20px rgba(0, 0, 0, .1);
+  -webkit-box-shadow: inset 10px 0 20px rgba(0, 0, 0, .1);
+  box-shadow: inset 10px 0 20px rgba(0, 0, 0, .1);
 }
 
 #book-viewer iframe {
@@ -161,8 +162,8 @@ body {
   display: none;
 }
 
-#controls > input[type=range] {
-    width: 400px;
+#controls>input[type=range] {
+  width: 400px;
 }
 
 #navigation {
