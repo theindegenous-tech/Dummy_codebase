@@ -6,10 +6,14 @@ from the_indegenous_backend.api.serializers import BookSerializer
 from the_indegenous_backend.utils import trie
 # Create your views here.
 
-keys = ["hello", "dog", "hell", "cat", "a", "help", "helps", "helping"]  # keys to form the trie structure.
+books = Book.objects.all()
+bookArray = BookSerializer(books, many=True).data     # keys to form the trie structure.
+keys=[]
+for book in bookArray:
+    keys.append(book['title'])
 t = trie.Trie()
-# creating the trie structure with the
-# given set of strings.
+
+# creating the trie structure with the given set of strings.
 t.formTrie(keys)
 
 @api_view(['GET', 'POST'])
@@ -57,13 +61,22 @@ def book_detail(request, pk):
 # Driver Code
 @api_view(['POST'])
 def search(request):
-    key = "h"  # key for autocomplete suggestions.    
-    # autocompleting the given key using
-    # our trie structure.
-    comp = t.printAutoSuggestions(key)
-    
+    response = Response()
+    if(request.GET.get('title')):
+        response.status=201
+        response.data = BookSerializer(Book.objects.get(title=request.GET.get('title'))).data
+        return response
+
+    key =  request.data['searchkey'] # key for autocomplete suggestions.    
+    # autocompleting the given key using our trie structure.
+    comp = t.getAutoSuggestions(key)
+
     if comp == -1:
         print("No other strings found with this prefix\n")
     elif comp == 0:
         print("No string found with this prefix\n")
-    return Response(status=201)
+    response.data={
+        "suggestions":comp
+    }
+    response.status=201
+    return response

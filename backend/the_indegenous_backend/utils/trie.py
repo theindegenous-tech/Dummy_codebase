@@ -40,22 +40,23 @@ class Trie():
  
     # Method to recursively traverse the trie
     # and return a whole word.
-    def suggestion(self, node, word):
+    def suggestion(self, node, word, results, ):
       if(self.cur_k > self.k):
           return
 
       if node.last:
         self.cur_k+=1
-        print(word)
+        results.append(word)
 
       for a, n in node.children.items():
-        self.suggestion(n, word + a)
+        self.suggestion(n, word + a, results)
  
     # Returns all the words in the trie whose common
     # prefix is the given key thus listing out all
     # the suggestions for autocomplete.
-    def printAutoSuggestions(self, key):
+    def getAutoSuggestions(self, key,):
       node = self.root
+      results=[]
       for a in key:
         # no string in the Trie has this prefix
         if not node.children.get(a):
@@ -68,8 +69,8 @@ class Trie():
       if not node.children:
         return -1
 
-      self.suggestion(node, key)
+      self.suggestion(node, key, results)
       self.cur_k = 0
-      return 1
+      return results
  
  
