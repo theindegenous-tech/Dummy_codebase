@@ -27,6 +27,12 @@ import { LikedBooks } from './components/books_landing/LikedBooks';
 import Discover from './components/Discover/Discover';
 import Completed from './components/Completed/Completed';
 import { Link, Outlet, Route, useLocation, Routes } from 'react-router-dom';
+import Profile from './components/user-profile/Profile';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Button } from '@mui/material';
+import Popup from './components/bookUpload/Popup';
+import './components/LoginPage/Signup.css'
+import Login from './components/LoginPage/Login';
 const drawerWidth = 339;
 
 // This is a function to render the tab based on its index 
@@ -42,13 +48,13 @@ function RenderSelectedTab({ currentDrawerTab, setDrawerTab }) {
             setDrawerTab(2)
         }
     }, [url, setDrawerTab])
-    var tabArray = [<Books setUrl={setUrl} mylibrarybooks={mylibrarybooks} likedbooks={likedbooks} setlikedbooks={setlikedbooks} setDrawerTab={setDrawerTab} />, <Discover />, <FPress loc={loc} url={url} bookmarkarray={bookmarkarray} setBookmarkarray={setBookmarkarray} setLoc={setLoc} />, <Bookmark setDrawerTab={setDrawerTab} bookmarkarray={bookmarkarray} url={url} />, <Completed />, <Mylibrary mylibrarybooks={mylibrarybooks} setUrl={setUrl} setmylibrarybooks={setmylibrarybooks} />, <LikedBooks setUrl={setUrl} likedbooks={likedbooks} setlikedbooks={setlikedbooks} />]
+    var tabArray = [<Books setUrl={setUrl} mylibrarybooks={mylibrarybooks} likedbooks={likedbooks} setlikedbooks={setlikedbooks} setDrawerTab={setDrawerTab} />, <Discover />, <FPress loc={loc} url={url} bookmarkarray={bookmarkarray} setBookmarkarray={setBookmarkarray} setLoc={setLoc} />, <Bookmark setDrawerTab={setDrawerTab} bookmarkarray={bookmarkarray} url={url} />, <Completed />, <Mylibrary mylibrarybooks={mylibrarybooks} setUrl={setUrl} setmylibrarybooks={setmylibrarybooks} />, <LikedBooks setUrl={setUrl} likedbooks={likedbooks} setlikedbooks={setlikedbooks} />, <Profile />]
     return tabArray[currentDrawerTab]
 }
 
 // This is a function to return the corresponding icon to the tab
 function RenderIcon({ index }) {
-    var iconArray = [<PersonOutlineIcon />, <SearchIcon />, <PersonOutlineIcon />, <BookmarkBorderOutlinedIcon />, <DoneOutlinedIcon />, <LibraryBooksRoundedIcon />, <FavoriteIcon />]
+    var iconArray = [<PersonOutlineIcon />, <SearchIcon />, <PersonOutlineIcon />, <BookmarkBorderOutlinedIcon />, <DoneOutlinedIcon />, <LibraryBooksRoundedIcon />, <FavoriteIcon />, <Profile />]
     return iconArray[index]
 }
 
@@ -85,10 +91,17 @@ export default function App() {
 
     // This is the state variable that holds the current selected tab in the drawer
     const [currentDrawerTab, setDrawerTab] = useState(0)
-    const [navNames, setnavNames] = useState(['home', 'discover', 'reading', 'bookmarks', 'completed', 'mylibrary', "liked"])
+    const [navNames, setnavNames] = useState(['home', 'discover', 'reading', 'bookmarks', 'completed', 'mylibrary', "liked","profile"])
     const [p, sP] = useState(useLocation());
+    const [isprofile, setisprofile]= useState(false);
     let location = useLocation();
     const [myarr, setMA] = useState([])
+
+    const [isOpen, setIsOpen] = useState(false);
+ 
+    const togglePopup = () => {
+        setIsOpen(!isOpen);
+    }
 
     useEffect(() => {
 
@@ -109,6 +122,12 @@ export default function App() {
 
 
     }, [location])
+
+    const handleSubmit = (e) => {
+    
+        e.preventDefault();
+        console.log("Book Added");
+    }
 
     return (myarr ?
         <Box className="app_box" sx={{ display: 'flex' }}>
@@ -147,10 +166,53 @@ export default function App() {
                 component="main"
                 sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
             >
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', width: '192px' }}>
+                        <button style={{padding:'0px', marginTop:'16px', backgroundColor:'#428CFB', color:'#FFFFFF', border:'none', width:'90px'}} onClick={togglePopup}>
+                            Add Book
+                        </button>
+                    <p style={{ marginTop: '16px', marginBottom: 0, width: '136px', textAlign: 'right' }}>Hariharan</p>
+                    
+                      {!isprofile? <Link to="profile">
+                         <AccountCircleIcon style={{ marginRight: '16px', marginTop: '16px' }} onClick={() => setisprofile(!isprofile)} />
+                       </Link>:<Link to="home">
+                         <AccountCircleIcon style={{ marginRight: '16px', marginTop: '16px' }} onClick={() => setisprofile(!isprofile)} />
+                       </Link>}
+                    
+                    
+                    </div>
+
+                </div>
                 <Routes >
+                    
                     <Route path={myarr[myarr.length - 1]} element={<RenderSelectedTab currentDrawerTab={currentDrawerTab} setDrawerTab={setDrawerTab} />} />
+                    
                 </Routes>
                 <Outlet />
+                {isOpen && <Popup
+                content={<>
+                    <form method="POST" onSubmit={handleSubmit} >
+                        <div className="input-container">
+                        <label>Book Title </label>
+                        <input type="text" name="booktitle" />
+                        </div>
+                        <div className="input-container" style={{height:'auto'}}>
+                        <label>Description </label>
+                        <input type="text" name="description"  />
+                        </div>
+                        <div className="input-container">
+                        <label>Author </label>
+                        <input type="text" name="author"  />
+                        </div>                        
+                        <div className="button-container">
+                        <input type="submit" />
+                        </div>
+                        
+                    </form>
+
+                </>}
+                handleClose={togglePopup}
+                />}
             </Box>
         </Box> : <></>
     );

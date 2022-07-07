@@ -21,7 +21,7 @@ function Signup() {
 
     var { firstname,lastname,email, password } = document.forms[0];
     try {
-     let signedupUserDetails = await axios({
+     let signedupUserDetails= await axios({
         method: 'post',
         url: 'http://localhost:8000/signup/',
         data: {
@@ -33,13 +33,13 @@ function Signup() {
         withCredentials: true
       });
       setSignup({email:signedupUserDetails.data.email,password:password.value});
-      // console.log(res);
       
     } catch (error) {
       console.log(error)
     }
     
   };
+
 
 
   useEffect(() => {
@@ -63,7 +63,7 @@ function Signup() {
       loginuser();
     }
   }, [signup]);
-
+  
 
   let navigate = useNavigate(); 
   const handleClick=()=>{

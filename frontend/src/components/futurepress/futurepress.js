@@ -1,16 +1,19 @@
 // import axios from 'axios';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import './index.css'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import { Navigate } from 'react-router-dom';
-function FPress({ url, bookmarkarray, setBookmarkarray,loc,setLoc }) {
+import { UserContext } from '../context/AuthContext';
+function FPress({  bookmarkarray, setBookmarkarray,loc,setLoc }) {
     console.log(3);
     const [currentSectionIndex, setCurrentSectionIndex] = useState(null)
     const [book, setBook] = useState(null)
     const [locationn,setLocation] = useState(null);
     const [show,setShow]=useState(true)
     const [bookmarked,setbookmarked] = useState(false)
+    let {url, setUrl}= useContext(UserContext)
+    console.log(url);
     var urlbookmarkmap= new Map()
     // This is a hook that runs as soon as the page renders and a url string is recieved to the component as props
     //upon recieving it, a state variable is loaded with the book 

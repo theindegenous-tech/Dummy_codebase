@@ -1,14 +1,28 @@
-import React from 'react'
+import React, { useEffect , useState} from 'react'
 import axios from 'axios';
-import { UserContext } from '../context/AuthContext'
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-
-
+import { UserContext } from '../context/AuthContext';
 function Profile() {
-  let {user, setUser} = useContext(UserContext)
-  let navigate = useNavigate()
+  let navigate = useNavigate(); 
+  let{user,setUser, url, setUrl}= useContext(UserContext)
+
+  const [firstname, setfirstName] = useState("");
+  const [lastname, setlastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pic, setPic] = useState();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  useEffect(()=>{
+    if(user){
+      setfirstName(user.first_name);
+      setlastName(user.last_name);
+      setEmail(user.email);
+      setPassword(user.password);
+    }
+  },[])
+
   const handleClick=async()=>{
     try {
       let res = await axios({
@@ -41,24 +55,24 @@ function Profile() {
             <form method="POST"  >
                 <div className="input-container">
                 <label>Firstname </label>
-                <input type="text" name="fname" required />
+                <input type="text" name="fname" value={firstname} onChange={(e) => setfirstName(e.target.value)}/>
                 </div>
                 <div className="input-container">
                 <label>Lastname </label>
-                <input type="text" name="lname" required />
+                <input type="text" name="lname" value={lastname} onChange={(e) => setlastName(e.target.value)}/>
                 </div>
                 <div className="input-container">
                 <label>Email </label>
-                <input type="email" name="uname" required /> 
+                <input type="email" name="uname" value={email} onChange={(e) => setEmail(e.target.value)}/> 
                 </div>
                 <div className="input-container">
                 <label>Password </label>
-                <input type="password" name="pass" required />
+                <input type="password" name="pass"  value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </div>
                 <div className="button-container">
                 <button>Update</button>
                 </div>
-            </form>
+              </form>
         </div>
         
         </div>

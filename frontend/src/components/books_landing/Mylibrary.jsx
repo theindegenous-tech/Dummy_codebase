@@ -1,7 +1,32 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useContext } from "react";
 import './style.scss'
 import './Hover.css'
-function Mylibrary({setUrl,mylibrarybooks}) { 
+import axios from "axios";
+import { UserContext } from "../context/AuthContext";
+function Mylibrary() { 
+
+  const [mylibrarybooks, setmylibrarybooks] = useState([])
+  let { user, setUser, url, setUrl } = useContext(UserContext)
+
+
+  useEffect(()=>{
+    const getBooks = async()=>{
+      let books = await Promise.all(user.personalisation.mylibrary.map(async(bookID)=>{
+        let res = await axios({
+          method: 'get',
+          url: 'http://localhost:8000/library/' + bookID + '/',
+        });
+        return res.data
+      }))
+      setmylibrarybooks(books)
+
+    }
+    if(user) {
+      getBooks()
+    }
+  },[user])
+
+
   const HandleAuthors=({authors})=>{
     const[authorString, setAuthorString] = useState("")
     useEffect(()=>{

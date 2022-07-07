@@ -46,5 +46,5 @@ class Book(models.Model):
     author = models.ManyToManyField(Author)
     publisher = models.ManyToManyField(Publisher)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name='bookgenre')
-    sub_genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name='booksubgenre')
-    file = models.FileField(upload_to='Books/')
+    sub_genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name='booksubgenre',blank=True,null=True)
+    url = models.URLField(max_length = 200)

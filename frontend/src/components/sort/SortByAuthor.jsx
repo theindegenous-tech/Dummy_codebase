@@ -1,59 +1,110 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import axios from "axios";
-import './style.scss'
-import './Hover.css'
-import { Navigate } from "react-router-dom";
-import { UserContext } from "../context/AuthContext";
-function LikedBooks() { 
+import Pagination from '../pagination/Pagination';
+import '../books_landing/style.scss'
+import '../books_landing/Hover.css'
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Profile from '../user-profile/Profile'
+import { useNavigate, Link } from 'react-router-dom';
+import { UserContext } from '../context/AuthContext';
+import SortIcon from '@mui/icons-material/Sort';
 
 
-
-
-
-  const [likedbooks, setLikedBooks] = useState([])
-  let { user, setUser, url, setUrl } = useContext(UserContext)
-
-
-  useEffect(()=>{
-    const getBooks = async()=>{
-      let books = await Promise.all(user.personalisation.liked.map(async(bookID)=>{
-        let res = await axios({
-          method: 'get',
-          url: 'http://localhost:8000/library/' + bookID + '/',
-        });
-        return res.data
-      }))
-      setLikedBooks(books)
-
-    }
-    if(user) {
-      getBooks()
-    }
-  },[user])
-
-  const HandleAuthors=({authors})=>{
-    const[authorString, setAuthorString] = useState("")
-    useEffect(()=>{
-      if(authors){
-        let str="" 
-        authors.forEach(author=>{
-          str+=author.first_name+" "+author.last_name+", "
+//This All_books function requests for All the book data and stores it in array named books
+let PageSize = 4;
+function SortByAuthor({  mylibrarybooks, likedbooks, authorsort, setauthorsort,books }) {
+  //states to set book cover page as icons
+  const [isprofile, setisprofile] = useState(false);
+  const[sort, setSort]= useState(false)
+  let {url, setUrl}= useContext(UserContext)
+  const _ = require("lodash"); 
+  let navigate = useNavigate(); 
+  let path = `/dashboard/reading`; 
+  const HandleAuthors = ({ authors }) => {
+    const [authorString, setAuthorString] = useState("")
+    useEffect(() => {
+      if (authors) {
+        let str = ""
+        authors.forEach(author => {
+          str += author.first_name + " " + author.last_name + ", "
         })
         str = str.substring(0, str.length - 2);
         setAuthorString(str)
       }
-    },[authors])
-    return (<div>{authorString}</div>) 
+    }, [authors])
+    return (<div>{authorString}</div>)
   }
+  
 
   
 
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "/epub.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    }
+  }, []);
+  //This hook maps the book array and adds one more property to array of object namely imgurl which is used to display as icon of book
+  
+
+  const [authsortbooks, setAuthorsortbooks]= useState([])
+
+    useEffect(()=>{
+      let gfg = _.sortBy(books, [function(o) { return o.title; }]);
+     setAuthorsortbooks(authsortbooks=>([...authsortbooks,...gfg]))
+    
+      console.log(gfg);
+      console.log(authsortbooks);
+    },[])
+
+  //This get request will fetch mylibrary books from user profile
 
 
+  // This function adds new book to mylibrarybooks if its not there
+  const addtomylibrary = async (book) => {
+    var isFound = 0;
+    // This function checks if book is already in the mylibrary
+    mylibrarybooks.some(element => {
+      if (element.id === book.id) {
+        isFound = 1;
+      }
+    });
+
+    if (isFound === 0) {
+      mylibrarybooks.push(book)
+      // await axios.put(`${url}`,{id:2,mylibrary:mylibrarybooks})
+    }
+  }
+
+
+  //This function adds new book to likedBooks array if its not there
+  const [Like, setLike] = useState(0);
+  const likeClick = (book) => {
+    if (book.liked === undefined) {
+      book.liked = true;
+    }
+    else {
+      book.liked = undefined;
+    }
+    setLike(Like + 1)
+    const index = likedbooks.indexOf(book);
+    if (index > -1) {
+      likedbooks.splice(index, 1); // 2nd parameter means remove one item only
+    }
+    else {
+      likedbooks.push(book);
+      // await axios.put(`${url}`,{id:2,liked:likedbooks})
+    }
+  }
 
   //This function renders all books    
 
   function Items({ currentItems }) {
+    // console.log(currentItems);
     return (
 
       <div className="books_container" style={{
@@ -70,10 +121,13 @@ function LikedBooks() {
         boxSizing: 'border-box',
         maxWidth: '1200px'
       }}
+
+
+
       >
 
         {
-          currentItems &&
+          currentItems  &&
           currentItems.map((book, i) => {
             return (
               <div className='book_out' style={{
@@ -90,9 +144,9 @@ function LikedBooks() {
                 flex: '1 1 139px',
                 order: '0',
                 flexGrow: '0',
-                border: 'none',
                 boxSizing: 'border-box',
               }} key={i}>
+
                 <div className="book_desc_button" style={{
                   height: '360px',
                   paddingLeft: '0px',
@@ -108,6 +162,17 @@ function LikedBooks() {
                   backgroundImage: `url(${book.imageurl})`,
                   backgroundSize: '100% 100%'
                 }}>
+                  <div >
+                    {(book.liked !== undefined && Like) ? <FavoriteIcon style={{ color: "red" }}
+                      onClick={() => {
+                        likeClick(book)
+                      }} /> : <FavoriteIcon
+                      onClick={() => {
+                        likeClick(book)
+                      }} />}
+                    {/* <i class='fa fa-heart red-color' onClick={()=> {
+                      likeClick(book)}} style={{color:'red'}}></i> */}
+                  </div>
                   <div className="book_description" style={{
                     height: '184px',
                     width: '234px',
@@ -117,7 +182,7 @@ function LikedBooks() {
                     alignItems: 'flex-start',
                     padding: '0px',
                     position: 'absolute',
-                    marginTop: '50px',
+                    marginTop: '30px',
                     marginLeft: '6px',
                     fontFamily: 'Work Sans',
                     fontStyle: 'normal',
@@ -131,7 +196,7 @@ function LikedBooks() {
                   </div>
                   <button className="book_read_button" style={{
                     position: 'absolute',
-                    marginTop: '296px',
+                    marginTop: '276px',
                     height: '48px',
                     width: '94px',
                     borderRadius: '8px',
@@ -152,7 +217,7 @@ function LikedBooks() {
                     color: '#428CFB',
                     fontStyle: 'normal',
                     textAlign: 'center'
-                  }} onClick={() => { setUrl(book.description) }} >READ
+                  }} onClick={() => { setUrl(book.description); addtomylibrary(book); navigate(path); }} >READ
                   </button>
                 </div>
                 <div style={{
@@ -247,37 +312,74 @@ function LikedBooks() {
 
     );
   }
-
-
+  //setting intitial page number as 1
+  const [currentPage, setCurrentPage] = useState(1);
+  //function to get array of number of books we want to render
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return authsortbooks.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, authsortbooks]);
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      background: '#FFFFFF',
-    }}>
-      <div style={{
-        height: 'auto',
-        maxWidth: '100%',
-        padding: '8px 0 0px 0',
+    <>
+      {<div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '48px',
-
         background: '#FFFFFF',
-        boxSizing: 'border-box',
-        backgroundColor: '#FFFFFF'
       }}>
-        <Items currentItems={likedbooks} >
+        <div style={{
+          height: 'auto',
+          maxWidth: '100%',
+          padding: '8px 0 0px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '48px',
 
-        </Items>
+          background: '#FFFFFF',
+          boxSizing: 'border-box',
+          backgroundColor: '#FFFFFF'
+        }}>
+          <div style={{display:'flex'}}>
+          <h3 style={{
+            color: '#000000',
+            height: 'auto',
+            width: '279px',
+            marginTop: '8px',
+            textAlign: 'left',
+            fontFamily: 'Work Sans',
+            fontWeight: '500',
+            fontSize: '24px',
+            marginBottom: '0px',
+            lineHeight: '28px',
+            letterSpacing: '-2%',
+            flex: 'none',
+
+            order: 0,
+            flexGrow: 0
+          }}>Based on your interests</h3>
+          <SortIcon style={{ marginTop: '8px',}} onClick={()=>setauthorsort(!authorsort)}/>
+          </div>
+          <Items currentItems={currentTableData} >
+
+          </Items>
 
 
-      </div>
-    </div>
-
+        </div>
+        <div style={{
+          position: 'relative',
+        }}>
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={authsortbooks.length}
+            pageSize={PageSize}
+            onPageChange={page => setCurrentPage(page)} />
+        </div>
+      </div> }
+    </>
 
   );
 }
 
-export { LikedBooks };
+export { SortByAuthor };
