@@ -21,15 +21,16 @@ function Signup() {
 
     var { firstname,lastname,email, password } = document.forms[0];
     try {
+      let data = {
+        first_name:firstname.value,
+        last_name:lastname.value,
+        email: email.value,
+        password: password.value
+      }
      let signedupUserDetails= await axios({
         method: 'post',
         url: 'http://localhost:8000/signup/',
-        data: {
-          first_name:firstname.value,
-          last_name:lastname.value,
-          email: email.value,
-          password: password.value
-        },
+        data: data,
         withCredentials: true
       });
       setSignup({email:signedupUserDetails.data.email,password:password.value});

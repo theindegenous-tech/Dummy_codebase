@@ -44,14 +44,23 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
-        
-
 
 # Personalisation class to store preferences
 class Personalisation(models.Model):
     id = models.BigAutoField(primary_key=True)
     liked = models.ManyToManyField(Book, blank=True, related_name='likedbooks')
     mylibrary = models.ManyToManyField(Book, blank=True, related_name='mylibrarybooks')
+
+class Bookmark(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    book_id = models.ManyToManyField(Book, blank=True)
+    personalisation = models.ForeignKey(Personalisation, default=None , null=True, blank=True, on_delete=models.CASCADE, related_name='bookmarks')     
+    
+class Location(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    bookmark_name = models.CharField(blank=True, max_length=255)
+    location = models.JSONField()
+    bookmark = models.ForeignKey(Bookmark, default=None , null=True, blank=True, on_delete=models.CASCADE, related_name='locations')
 
 # User model
 class User(AbstractUser):
@@ -61,7 +70,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
-    personalisation = models.ForeignKey(Personalisation, on_delete=models.CASCADE, default=None , null=True, blank=True)
+    personalisation = models.OneToOneField(Personalisation, default=None , null=True, blank=True, on_delete=models.CASCADE)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = UserManager()

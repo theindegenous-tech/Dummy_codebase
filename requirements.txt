@@ -1,9 +1,12 @@
-asgiref==3.5.1
+asgiref==3.5.2
 backports.zoneinfo==0.2.1
-Django==4.0.4
-django-cors-headers==3.11.0
-django-filter==21.1
+cffi==1.15.1
+cryptography==37.0.4
+Django==4.0.6
+django-cors-headers==3.13.0
 djangorestframework==3.13.1
 psycopg2==2.9.3
+pycparser==2.21
+PyJWT==2.4.0
 pytz==2022.1
 sqlparse==0.4.2
