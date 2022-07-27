@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
 
-export default function DropdownMenu() {
+export default function DropdownMenu({setsortDrawerTab}) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -17,10 +17,27 @@ export default function DropdownMenu() {
   };
 
   const handleClose = (event) => {
+    
+    
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-
+    if(event.currentTarget.dataset!==undefined){
+      const { myValue } = event.currentTarget.dataset;
+      console.log(myValue);
+    if(myValue==="title"){
+      setsortDrawerTab(0);
+    }
+    else if(myValue==="author"){
+      setsortDrawerTab(1);
+    }
+    else if(myValue==="language"){
+      setsortDrawerTab(2);
+    }
+    else if(myValue==="remove"){
+      setsortDrawerTab(-1);
+    }
+    }
     setOpen(false);
   };
 
@@ -44,7 +61,9 @@ export default function DropdownMenu() {
   }, [open]);
 
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack 
+    direction="row"
+     spacing={2}>
       
       <div>
         <Button
@@ -54,8 +73,9 @@ export default function DropdownMenu() {
           aria-expanded={open ? 'true' : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
+          style={{backgroundColor:'blue',color:'#FFFFFF'}}
         >
-          Dashboard
+          SortBy
         </Button>
         <Popper
           open={open}
@@ -81,9 +101,10 @@ export default function DropdownMenu() {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    <MenuItem data-my-value="title" onClick={handleClose}>Title</MenuItem>
+                    <MenuItem data-my-value="author" onClick={handleClose}>Author</MenuItem>
+                    <MenuItem data-my-value="language" onClick={handleClose}>Language</MenuItem>
+                    <MenuItem data-my-value="remove" onClick={handleClose}>RemoveSort</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

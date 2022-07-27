@@ -1,13 +1,17 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect ,useContext} from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-function Bookmark({setDrawerTab,bookmarkarray,url}) {
-    if(setDrawerTab!==undefined) setDrawerTab(3);
-    console.log(url);
+import { UserContext } from '../context/AuthContext';
+function Bookmark() {
     const [currentSectionIndex, setCurrentSectionIndex] = useState(null)
     const [book, setBook] = useState(null)
     const [locationn,setLocation] = useState(null);
-    if(bookmarkarray) setLocation(bookmarkarray[0]);
     const [bookmarkclicked, setbookmarkclicked]= useState(false);
+    const [bookmarkarray, setbookmarkarray]= useState([]);
+    const {user, setUser, readingbook, setReadingbook}= useContext(UserContext);
+    let url=null;
+    if(readingbook){
+        url= readingbook.description;
+    }
      // This is a hook that runs as soon as the page renders and a url string is recieved to the component as props
     //upon recieving it, a state variable is loaded with the book 
     useEffect(() => {
@@ -30,7 +34,6 @@ function Bookmark({setDrawerTab,bookmarkarray,url}) {
                 spread: "always"
             });
           
-            console.log(currentSectionIndex);
             rendition.display(currentSectionIndex);
             rendition.on("rendered", (section) => {
                 var current = book.navigation && book.navigation.get(section.href);

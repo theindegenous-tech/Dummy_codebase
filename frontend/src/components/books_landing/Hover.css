@@ -27,10 +27,25 @@
     cursor: pointer;
 }
 
-@media only screen and (max-width:998px) {
+@media only screen and (max-width:1475px) {
     .books_container {
-        flex-direction: column;
-        height: 2000px
+        /* background-color:red; */
     }
 
+}
+
+.fpress_img{
+    border: none;
+}
+
+.fpress_img:hover {
+    border: 2px solid purple;
+}
+
+.bookdescription_3{
+    border: none;
+}
+
+.bookdescription_3:hover{
+    border: 2px solid purple;
 }

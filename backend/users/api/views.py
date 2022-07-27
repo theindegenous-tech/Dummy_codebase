@@ -1,23 +1,23 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import AuthenticationFailed
-from users.models import Location, Bookmark, Personalisation, User
-from users.api.serializers import LocationSerializer, BookmarkSerializer, UserSerializer, PersonalisationSerializer
+from users.models import Bookmark, Personalisation, User
+from users.api.serializers import BookmarkSerializer, UserSerializer, PersonalisationSerializer
 import jwt, datetime
 
 # Login a user.
-@api_view(['POST'])
+@api_view(['POST','OPTION'])
 def login_user(request):
     email = request.data['email']
     password = request.data['password']
     user = User.objects.filter(email=email).first()
-
     if user is None:
         raise AuthenticationFailed('User not found!')
 
     if not user.check_password(password):
         raise AuthenticationFailed('Incorrect password!')
 
+    serializer = UserSerializer(user)
     payload = {
         'id': user.id,
         'exp': datetime.datetime.now() + datetime.timedelta(days=1),
@@ -26,11 +26,8 @@ def login_user(request):
 
     token = jwt.encode(payload, 'secret', algorithm='HS256')
     response = Response()
-    response.set_cookie(key='jwt', value=token, httponly=True)
-    response.data={
-        'jwt':token
-    }
-
+    response.set_cookie(key='jwt', value=token, samesite=None, httponly=True)
+    response.data=serializer.data
     return response
 
 #Signup a user.
@@ -91,7 +88,7 @@ def personalisation_detail(request, pk):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
-@api_view(['GET'])
+@api_view(['GET','DELETE'])
 def bookmarks_detail(request,pk):
     try:
         bookmark_setting = Bookmark.objects.get(pk=pk)
@@ -109,34 +106,20 @@ def bookmarks_detail(request,pk):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
+    elif request.method == 'DELETE':
+        bookmark_setting.delete()
+        return Response(status=204)
+
 @api_view(['GET','POST'])
-def bookmarks_view(request):
+def bookmarks_list(request):
     if request.method == 'GET':
         bookmarks = Bookmark.objects.all()
         serializer = BookmarkSerializer(bookmarks, many=True)
         return Response(serializer.data)
 
-@api_view(['GET'])
-def locations_detail(request,pk):
-    try:
-        location_setting = Location.objects.get(pk=pk)
-    except Personalisation.DoesNotExist:
-        return Response(status=404)
-
-    if request.method == 'GET':
-        serializer = LocationSerializer(location_setting)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = LocationSerializer(location_setting, data=request.data)
+    elif request.method == 'POST':
+        serializer = BookmarkSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-
-@api_view(['GET','POST'])
-def locations_view(request):
-    if request.method == 'GET':
-        locations = Location.objects.all()
-        serializer = LocationSerializer(locations, many=True)
-        return Response(serializer.data)

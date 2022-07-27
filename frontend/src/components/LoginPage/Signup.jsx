@@ -13,7 +13,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 function Signup() {
   // React States
   const [signup, setSignup] = useState(false);
-  let { user, setUser } = useContext(UserContext);
+  let { user, setUser } = useContext(UserContext); 
   const handleSubmit = async (e) => {
 
     //Prevent page reload
@@ -21,16 +21,15 @@ function Signup() {
 
     var { firstname,lastname,email, password } = document.forms[0];
     try {
-      let data = {
-        first_name:firstname.value,
-        last_name:lastname.value,
-        email: email.value,
-        password: password.value
-      }
      let signedupUserDetails= await axios({
         method: 'post',
         url: 'http://localhost:8000/signup/',
-        data: data,
+        data: {
+          first_name:firstname.value,
+          last_name:lastname.value,
+          email: email.value,
+          password: password.value
+        },
         withCredentials: true
       });
       setSignup({email:signedupUserDetails.data.email,password:password.value});

@@ -4,7 +4,7 @@ import { UserContext } from '../context/AuthContext'
 
 const PrivateRoute = ({ children }) => {
     let { user } = useContext(UserContext)
-    return (!user ? <Navigate to="/signup" /> : children
+    return (!user ? <Navigate to="/login" /> : children
     )
 }
 

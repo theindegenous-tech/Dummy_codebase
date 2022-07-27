@@ -25,13 +25,13 @@ body {
 }
 
 #viewer.spreads {
-  width: 900px;
-  height: 600px;
-  box-shadow: 0 0 4px #ccc;
+  width: 461px;
+  height: 571px;
+  /* box-shadow: 0 0 4px #ccc; */
   border-radius: 5px;
   padding: 0;
-  position: relative;
-  margin: 10px auto;
+  /* position: relative; */
+  /* margin: 10px auto; */
   top: calc(50vh - 400px);
 }
 

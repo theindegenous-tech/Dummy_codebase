@@ -1,19 +1,34 @@
+// import { useState, useEffect, useMemo, useContext } from "react";
 import { useState, useEffect, useMemo, useContext } from "react";
-import Pagination from '../pagination/Pagination';
+import axios from "axios";
+import Pagination from "../pagination/Pagination";
 import '../books_landing/style.scss'
 import '../books_landing/Hover.css'
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/AuthContext';
-import DropdownMenu from'./DropdownMenu'
+import SortByLanguage from "../sort/SortByLanguage";
+import SortByTitle from "../sort/SortByTitle";
+import { SortByAuthor } from '../sort/SortByAuthor'
+
+
+
 //This All_books function requests for All the book data and stores it in array named books
 let PageSize = 4;
-function SortByAuthor({  books,setsortDrawerTab }) {
-  
-  let {readingbook,setReadingbook}= useContext(UserContext)
-  const _ = require("lodash"); 
-  let navigate = useNavigate(); 
-  let path = `/dashboard/reading1`; 
+function BookReusable2({ books_props }) {
+
+  //states to set book cover page as icons
+  let { user, setUser, readingbook, setReadingbook } = useContext(UserContext)
+  const [books, setBooks] = useState([])
+  const [currentsortDrawerTab, setsortDrawerTab] = useState(-1);
+  let navigate = useNavigate();
+  let path = `/dashboard/reading1`;
+  useEffect(() => {
+    if (books_props) {
+      setBooks(books_props)
+    }
+  }, [books_props])
+
   const HandleAuthors = ({ authors }) => {
     const [authorString, setAuthorString] = useState("")
     useEffect(() => {
@@ -28,8 +43,6 @@ function SortByAuthor({  books,setsortDrawerTab }) {
     }, [authors])
     return (<div>{authorString}</div>)
   }
-  
-
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -40,32 +53,68 @@ function SortByAuthor({  books,setsortDrawerTab }) {
       document.body.removeChild(script);
     }
   }, []);
-  //This hook maps the book array and adds one more property to array of object namely imgurl which is used to display as icon of book
-  
-
-  const [authsortbooks, setAuthorsortbooks]= useState([])
-    useEffect(()=>{
-      let gfg = _.sortBy(books, [function(o) { return (_.startCase(_.camelCase(o.author[0].first_name))); }]);
-     setAuthorsortbooks(authsortbooks=>([...authsortbooks,...gfg]))
-    },[])
-
-  //This get request will fetch mylibrary books from user profile
 
 
-  // This function adds new book to mylibrarybooks if its not there
-  const [liked,setLiked]=useState([]);
-  const mylibraryClick = async (book) => {
-    
 
-    
+  function RenderSelectedSortTab({ currentsortDrawerTab, books, setsortDrawerTab }) {
+
+    var tabArray = [<SortByTitle books={books} setsortDrawerTab={setsortDrawerTab} />, <SortByAuthor books={books} setsortDrawerTab={setsortDrawerTab} />, <SortByLanguage books={books} setsortDrawerTab={setsortDrawerTab} />]
+    return tabArray[currentsortDrawerTab]
   }
 
 
-  
-  const likeClick = (book) => {
-    
-    
-   
+  //This function adds new book to likedBooks array if its not there
+  const likeClick = async (book) => {
+    let likedbooks = user.personalisation.liked
+    likedbooks.push(book.id)
+    // console.log({...user.personalisation, liked:likedbooks})
+    let res = await axios({
+      method: 'put',
+      url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+      data:{...user.personalisation, liked:likedbooks},
+      withCredentials: true
+    });
+    if(res.status === 200) {
+      res = await axios({
+        method: 'get',
+        url: 'http://localhost:8000/user/',
+        withCredentials: true
+      })
+      setUser(res.data)
+    }
+  }
+  const removeLike = async(book) =>{
+    let likedbooks = user.personalisation.liked.filter(b=>b!=book.id)
+    let res = await axios({
+      method: 'put',
+      url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+      data:{...user.personalisation, liked:likedbooks},
+      withCredentials: true
+    });
+    if(res.status === 200) {
+      res = await axios({
+        method: 'get',
+        url: 'http://localhost:8000/user/',
+        withCredentials: true
+      })
+      setUser(res.data)
+    }
+  }
+
+  //This function adds new book to mylibraryBooks array if its not there
+  const mylibraryClick = async (book) => {
+    let librarybooks = user.personalisation.mylibrary;
+    const index = librarybooks.indexOf(book.id);
+    if(index==-1){
+      librarybooks.push(book.id);
+    }
+    let res = await axios({
+      method: 'put',
+      url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+      data:{...user.personalisation, mylibrary:librarybooks},
+      withCredentials: true
+    });
+    console.log(res.status)
   }
 
   //This function renders all books    
@@ -87,13 +136,10 @@ function SortByAuthor({  books,setsortDrawerTab }) {
         boxSizing: 'border-box',
         maxWidth: '1200px'
       }}
-
-
-
       >
 
         {
-          currentItems  &&
+          currentItems &&
           currentItems.map((book, i) => {
             return (
               <div className='book_out' style={{
@@ -129,10 +175,10 @@ function SortByAuthor({  books,setsortDrawerTab }) {
                   backgroundSize: '100% 100%'
                 }}>
                   <div >
-                    {liked.includes(book.id) ? <FavoriteIcon style={{ color: "red" }}
+                    {user.personalisation.liked.includes(book.id) ? <FavoriteIcon style={{cursor:'pointer', color: "red" }}
                       onClick={() => {
-                        likeClick(book)
-                      }} /> : <FavoriteIcon
+                        removeLike(book)
+                      }} /> : <FavoriteIcon style={{cursor:'pointer'}}
                       onClick={() => {
                         likeClick(book)
                       }} />}
@@ -156,7 +202,8 @@ function SortByAuthor({  books,setsortDrawerTab }) {
                     letterSpacing: '-0.02em',
                     color: '#',
                   }}>
-                    This section is all about description of book. Description of book gives us brief idea of what the book is all about and is also one of the main component of book which can either make reader read the book or not.
+                    {book.description}
+                    {/* This section is all about description of book. Description of book gives us brief idea of what the book is all about and is also one of the main component of book which can either make reader read the book or not. */}
                   </div>
                   <button className="book_read_button" style={{
                     position: 'absolute',
@@ -181,7 +228,7 @@ function SortByAuthor({  books,setsortDrawerTab }) {
                     color: '#428CFB',
                     fontStyle: 'normal',
                     textAlign: 'center'
-                  }} onClick={() => { setReadingbook(book);{mylibraryClick(book)}; navigate(path); }} >READ
+                  }} onClick={() => { setReadingbook(book); { mylibraryClick(book) }; navigate(path); }} >READ
                   </button>
                 </div>
                 <div style={{
@@ -282,67 +329,70 @@ function SortByAuthor({  books,setsortDrawerTab }) {
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    return authsortbooks.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, authsortbooks]);
+    return books.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, books]);
 
   return (
     <>
-      
-      {<div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        background: '#FFFFFF',
-      }}>
-        <div style={{
-          height: 'auto',
-          maxWidth: '100%',
-          padding: '8px 0 0px 0',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '48px',
+      {currentsortDrawerTab === -1 ?
+        <>
 
-          background: '#FFFFFF',
-          boxSizing: 'border-box',
-          backgroundColor: '#FFFFFF'
-        }}>
-          <div style={{display:'flex'}}>
-          <h3 style={{
-            color: '#000000',
+
+
+          <div style={{
             height: 'auto',
-            width: '279px',
-            marginTop: '8px',
-            textAlign: 'left',
-            fontFamily: 'Work Sans',
-            fontWeight: '500',
-            fontSize: '24px',
-            marginBottom: '0px',
-            lineHeight: '28px',
-            letterSpacing: '-2%',
-            flex: 'none',
+            width: '100%',
+            padding: '8px 0 0px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '48px',
+            marginLeft: '8px',
+            background: '#FFFFFF',
+            boxSizing: 'border-box',
+            backgroundColor: '#FFFFFF'
+          }}>
+            <div style={{ display: 'flex' }}>
+              <h3 style={{
+                color: '#000000',
+                height: 'auto',
+                width: 'auto',
+                marginTop: '8px',
+                textAlign: 'left',
+                fontFamily: 'Work Sans',
+                fontWeight: '500',
+                fontSize: '24px',
+                marginBottom: '0px',
+                lineHeight: '28px',
+                letterSpacing: '-2%',
+                flex: 'none',
 
-            order: 0,
-            flexGrow: 0
-          }}>Based on your interests</h3>
-          <DropdownMenu style={{ marginTop: '8px', }} setsortDrawerTab={setsortDrawerTab}/>
+                order: 0,
+                flexGrow: 0
+              }}>Currently Trending</h3>
+            </div>
+            {<Items currentItems={currentTableData} />}
+
+
           </div>
-          {<Items currentItems={currentTableData} />}
+          <div style={{
+            position: 'relative',
+          }}>
+            <Pagination
+              className="pagination-bar"
+              currentPage={currentPage}
+              totalCount={books.length}
+              pageSize={PageSize}
+              onPageChange={page => setCurrentPage(page)} />
+          </div>
 
 
-        </div>
-        <div style={{
-          position: 'relative',
-        }}>
-          <Pagination
-            className="pagination-bar"
-            currentPage={currentPage}
-            totalCount={authsortbooks.length}
-            pageSize={PageSize}
-            onPageChange={page => setCurrentPage(page)} />
-        </div>
-      </div> }
+
+
+
+        </> : <RenderSelectedSortTab currentsortDrawerTab={currentsortDrawerTab} books={books} setsortDrawerTab={setsortDrawerTab} />}
     </>
 
   );
 }
 
-export { SortByAuthor };
+export { BookReusable2 };

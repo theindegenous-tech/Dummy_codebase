@@ -5,14 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/AuthContext';
 function Profile() {
   let navigate = useNavigate(); 
-  let{user,setUser, url, setUrl}= useContext(UserContext)
+  let{user,setUser}= useContext(UserContext)
 
   const [firstname, setfirstName] = useState("");
   const [lastname, setlastName] = useState("");
   const [email, setEmail] = useState("");
-  const [pic, setPic] = useState();
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(()=>{
     if(user){

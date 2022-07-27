@@ -2,8 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import './style.scss'
 import './Hover.css'
-import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import DeleteIcon from '@mui/icons-material/Delete';
 function LikedBooks() { 
 
 
@@ -11,7 +12,9 @@ function LikedBooks() {
 
 
   const [likedbooks, setLikedBooks] = useState([])
-  let { user, setUser, url, setUrl } = useContext(UserContext)
+  let { user, setUser,readingbook,setReadingbook} = useContext(UserContext)
+  let navigate = useNavigate(); 
+  let path = `/dashboard/reading1`;
 
 
   useEffect(()=>{
@@ -46,7 +49,25 @@ function LikedBooks() {
     return (<div>{authorString}</div>) 
   }
 
-  
+  //This function removes book from likedbooks
+
+  const likeClick = async(book) => {
+      let likedbook = user.personalisation.liked
+      const index = likedbook.indexOf(book.id);
+      if (index > -1) { // only splice array when item is found
+      likedbook.splice(index, 1); // 2nd parameter means remove one item only
+      }
+      let mylikedbooks= likedbooks;
+     const filteredBooks = mylikedbooks.filter((item) => item.id !== book.id);
+      console.log(filteredBooks);
+      setLikedBooks(filteredBooks)
+      let res = await axios({
+        method: 'put',
+        url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+        data:{...user.personalisation, liked:likedbooks},
+        withCredentials: true
+      });
+  }
 
 
 
@@ -108,6 +129,9 @@ function LikedBooks() {
                   backgroundImage: `url(${book.imageurl})`,
                   backgroundSize: '100% 100%'
                 }}>
+                  <div style={{display:'flex',justifyContent:'flex-end'}}>
+                    <DeleteIcon onClick={()=>{likeClick(book)}}/>
+                  </div>
                   <div className="book_description" style={{
                     height: '184px',
                     width: '234px',
@@ -117,7 +141,7 @@ function LikedBooks() {
                     alignItems: 'flex-start',
                     padding: '0px',
                     position: 'absolute',
-                    marginTop: '50px',
+                    marginTop: '30px',
                     marginLeft: '6px',
                     fontFamily: 'Work Sans',
                     fontStyle: 'normal',
@@ -131,7 +155,7 @@ function LikedBooks() {
                   </div>
                   <button className="book_read_button" style={{
                     position: 'absolute',
-                    marginTop: '296px',
+                    marginTop: '276px',
                     height: '48px',
                     width: '94px',
                     borderRadius: '8px',
@@ -152,7 +176,7 @@ function LikedBooks() {
                     color: '#428CFB',
                     fontStyle: 'normal',
                     textAlign: 'center'
-                  }} onClick={() => { setUrl(book.description) }} >READ
+                  }} onClick={() => { setReadingbook(book);navigate(path) }} >READ
                   </button>
                 </div>
                 <div style={{

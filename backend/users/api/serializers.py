@@ -1,19 +1,15 @@
 from dataclasses import field
 from rest_framework import serializers
-from users.models import User, Personalisation, Bookmark, Location
+from users.models import User, Personalisation, Bookmark
 
 
 
-class LocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Location
-        fields = ['id', 'bookmark_name','location','bookmark']
 
 class BookmarkSerializer(serializers.ModelSerializer):
-    locations = LocationSerializer(read_only=True, many=True)
+    
     class Meta:
         model = Bookmark
-        fields = ['id', 'book_id', 'personalisation', 'locations']
+        fields = ['id', 'book_id', 'bookmark_name', 'personalisation', 'location']
 
 class PersonalisationSerializer(serializers.ModelSerializer):
     bookmarks = BookmarkSerializer(read_only=True, many=True)

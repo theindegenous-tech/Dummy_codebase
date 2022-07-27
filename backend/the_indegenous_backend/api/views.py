@@ -6,15 +6,15 @@ from the_indegenous_backend.api.serializers import BookSerializer
 from the_indegenous_backend.utils import trie
 # Create your views here.
 
-# books = Book.objects.all()
-# bookArray = BookSerializer(books, many=True).data     # keys to form the trie structure.
-# keys=[]
-# for book in bookArray:
-#     keys.append(book['title'])
-# t = trie.Trie()
+books = Book.objects.all()
+bookArray = BookSerializer(books, many=True).data     # keys to form the trie structure.
+keys=[]
+for book in bookArray:
+    keys.append(book['title'])
+t = trie.Trie()
 
-# # # creating the trie structure with the given set of strings.
-# t.formTrie(keys)
+# creating the trie structure with the given set of strings.
+t.formTrie(keys)
 
 @api_view(['GET', 'POST'])
 def book_list(request):
@@ -26,12 +26,12 @@ def book_list(request):
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
 
-#     elif request.method == 'POST':
-#         serializer = BookSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=201)
-#         return Response(serializer.errors, status=400)
+    elif request.method == 'POST':
+        serializer = BookSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def book_detail(request, pk):
@@ -67,17 +67,25 @@ def search(request):
     #     response.data = BookSerializer(Book.objects.get(title=request.GET.get('title'))).data
     #     return response
         
-    # # key for autocomplete suggestions.
-    # key =  request.data['searchkey']    
-    # # autocompleting the given key using our trie structure.
-    # comp = t.getAutoSuggestions(key)
+    # key for autocomplete suggestions.
+    key =  request.data['searchkey']    
+    # autocompleting the given key using our trie structure.
+    comp = t.getAutoSuggestions(key)
 
-    # if comp == -1:
-    #     print("No other strings found with this prefix\n")
-    # elif comp == 0:
-    #     print("No string found with this prefix\n")
-    # response.data={
-    #     "suggestions":comp
-    # }
+    if comp == -1:
+        # No other strings found with this prefix
+        return Response(status=404)
+    elif comp == 0:
+        # No string found with this prefix
+        return Response(status=404)
+
+    searchResults = []
+    for bookTitle in comp:
+        bookObj = BookSerializer(Book.objects.get(title=bookTitle)).data
+        searchResults.append(bookObj)
+    
+    response.data={
+        "suggestions":searchResults
+    }
     response.status=201
     return response

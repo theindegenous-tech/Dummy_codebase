@@ -12,12 +12,50 @@ code {
         monospace;
 }
 
-.app_box {
 
-    @media (min-width: 500px) {
-    }
+
+    /* @media only screen and (max-width: 1475px) {
+        .main{
+            background-color: green;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    } */
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+    border: none;
 }
 
 .MuiBox-root.css-1jmjcem{
     padding:0
+}
+
+.unselected {
+    background-color: #EEEEFF;
+}
+
+.selected {
+    background-color: #6666AA;
+    color: white
+}
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+    color:'none';
+}
+
+.makeStyles-inputRoot-3.MuiInputBase-root.MuiInputBase-colorPrimary.css-1le28he-MuiInputBase-root{
+    height:'48px'
+}
+
+.makeStyles-inputRoot-3.MuiInputBase-root.MuiInputBase-colorPrimary.css-1le28he-MuiInputBase-root{
+    margin-left: 0;;
+}
+
+
+.MuiListItemButton-root.MuiListItemButton-gutters.MuiButtonBase-root.css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root{
+    border-radius: 8px;
+}
+
+.MuiDrawer-root.MuiDrawer-docked.css-45iewo-MuiDrawer-docked{
+    color:none;
 }

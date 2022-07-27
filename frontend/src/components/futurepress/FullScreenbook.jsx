@@ -1,38 +1,53 @@
-// import axios from 'axios';
-import { useEffect, useState, useRef, useContext } from 'react';
-import './index.css'
+import axios from 'axios';
+import { useEffect, useState, useContext } from 'react';
+import './index2.css'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark'
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/AuthContext';
-function FPress({  bookmarkarray, setBookmarkarray,loc,setLoc }) {
-    console.log(3);
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import _ from 'lodash';
+
+
+
+
+
+function FullScreenbook() {
     const [currentSectionIndex, setCurrentSectionIndex] = useState(null)
     const [book, setBook] = useState(null)
-    const [locationn,setLocation] = useState(null);
-    const [show,setShow]=useState(true)
-    const [bookmarked,setbookmarked] = useState(false)
-    let {url, setUrl}= useContext(UserContext)
-    console.log(url);
-    var urlbookmarkmap= new Map()
+    const [pageLocation, setLocation] = useState(null);
+    const [show, setShow] = useState(true)
+    let { user, setUser, readingbook } = useContext(UserContext);
+    let navigate = useNavigate();
+    let path = "/login"
+    const[pageCount, setPageCount] = useState(0);
+    let browseclick = 0;
+    const [nav, setnav] = useState(0);
+    let path2 = "/dashboard/reading4";
+
+    useEffect(() => {
+        if (nav !== 0) {
+            navigate(path2);
+        }
+
+    }, [nav])
+
+    const handleClick = () => {
+        browseclick = browseclick + 1;
+        setnav(browseclick);
+    }
+
     // This is a hook that runs as soon as the page renders and a url string is recieved to the component as props
     //upon recieving it, a state variable is loaded with the book 
     useEffect(() => {
-        if (url) {
+        if (readingbook) {
             var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
             var c = (params && params.get("loc")) ? params.get("loc") : undefined;
             setCurrentSectionIndex(c)
-            var b = window.ePub(url);
+            var b = window.ePub(readingbook.url);
             setBook(b)
-            if(urlbookmarkmap[url]!==undefined){
-                setBookmarkarray(urlbookmarkmap[url]);
-            }
-            else{
-                setBookmarkarray([]);
-            }
-            setLoc([]);
         }
-    }, [url])
+    }, [readingbook])
 
     //This is a hook that runs as soon as the book state variable is updated and renders the epub to the display
     //it also sets all up all the event handling when it comes to navigation with mouse or arrows
@@ -41,8 +56,8 @@ function FPress({  bookmarkarray, setBookmarkarray,loc,setLoc }) {
             var rendition = book.renderTo("viewer", {
                 width: "100%",
                 height: "100%",
-                spread: "always"               
-                
+                spread: "always"
+
             });
             rendition.display(currentSectionIndex);
             rendition.on("rendered", (section) => {
@@ -64,8 +79,13 @@ function FPress({  bookmarkarray, setBookmarkarray,loc,setLoc }) {
                     }
                 }
 
-            });   
+            });
             rendition.on("relocated", (location) => {
+                setPageCount(pageCount+1)
+                if (pageCount > 5 && !user) {
+                    pageCount = 0;
+                    navigate(path);
+                }
                 setLocation(location);
                 setShow(true);
                 var next = book.package.metadata.direction === "rtl" ? document.getElementById("prev") : document.getElementById("next");
@@ -84,7 +104,6 @@ function FPress({  bookmarkarray, setBookmarkarray,loc,setLoc }) {
                 }
 
             });
-            book.loaded.spine.then((spine) => { console.log(spine) });
             rendition.on("layout", (layout) => {
                 let viewer = document.getElementById("viewer");
 
@@ -115,11 +134,11 @@ function FPress({  bookmarkarray, setBookmarkarray,loc,setLoc }) {
 
                 $select.onchange = () => {
                     var index = $select.selectedIndex,
-                    url = $select.options[index].getAttribute("ref");
+                        url = $select.options[index].getAttribute("ref");
                     rendition.display(url);
                     return false;
                 };
-                
+
 
             });
             book.ready.then(() => {
@@ -156,72 +175,98 @@ function FPress({  bookmarkarray, setBookmarkarray,loc,setLoc }) {
             })
         }
     }, [currentSectionIndex, book])
-    const isFound = bookmarkarray.some(element => {
-            if (locationn && element.start.cfi === locationn.start.cfi) {
-                return true;
-            }
 
-            return false;
-        });
-    const handleSubmit = (e) => {
-    
+    const isFound = user.personalisation.bookmarks.some(element => {
+        if ( _.isEqual(pageLocation, element.location)) {
+            return true;
+        }
+
+        return false;
+    });
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
         setShow(!show);
-        var bmtitle= document.getElementById('bm').value;
-        console.log(locationn);
-        if(isFound===false){
-            const tempMyObj = Object.assign({}, locationn);
-            tempMyObj.bookmarktitle=bmtitle;
-            bookmarkarray.push(tempMyObj);
-             
-        } 
-        urlbookmarkmap[url]=bookmarkarray;
+        var bookmarktitle = document.getElementById('bookmark').value;
+        let data = {}
+        data['book_id'] = readingbook.id
+        data['bookmark_name'] = bookmarktitle
+        data['location'] = Object.assign({}, pageLocation)
+        data['personalisation'] = user.personalisation.id
+        let res = await axios({
+            method: 'post',
+            url: 'http://localhost:8000/bookmarks/',
+            data: data,
+        });
+        if(res.status === 201) {
+            let updatedUser = await axios({
+                method: 'get',
+                url: 'http://localhost:8000/user/',
+                withCredentials:true
+            })
+            setUser(updatedUser.data)
+        }
     }
 
-        function Form() {
-          return (
-            <form onSubmit = {handleSubmit}>
-            <input id="bm" placeholder='Bookmark Title'></input>
-            <button type = 'submit'>Add Bookmark</button>
+    function Form() {
+        return (
+            <form onSubmit={handleSubmit}>
+                <input id="bookmark" placeholder='Bookmark Title'></input>
+                <button type='submit'>Add Bookmark</button>
             </form>
-          )
-        }
+        )
+    }
 
-        const RemoveBookmark=()=>{
-            setbookmarked(!bookmarked);
-            var index = bookmarkarray.findIndex(function(o){
-                return o.start.cfi === locationn.start.cfi;
-            })
-            if (index !== -1) {
-                bookmarkarray=bookmarkarray.splice(index, 1);
+    const RemoveBookmark = (e) => {
+        e.preventDefault()
+        user.personalisation.bookmarks.forEach(async(bookmark)=>{
+            if(_.isEqual(bookmark.location, pageLocation)) {
+                let res = await axios({
+                    method: 'delete',
+                    url: 'http://localhost:8000/bookmarks/'+bookmark.id+'/',
+                });
+                if(res.status === 204) {
+                    let updatedUser = await axios({
+                        method: 'get',
+                        url: 'http://localhost:8000/user/',
+                        withCredentials:true
+                    })
+                    setUser(updatedUser.data)
+                }
             }
-            urlbookmarkmap[url]=bookmarkarray;
-        }
-        
-        function BookMark() {
-          return (
-            <div>{isFound?<BookmarkIcon onClick={RemoveBookmark}/>:<BookmarkBorderIcon onClick={()=>setShow(!show)}/>}</div>
-          )
-        }
-        
+        })
+    }
+
+    function BookMark() {
+        return (
+            <div>{isFound ? <BookmarkIcon onClick={RemoveBookmark} /> : <BookmarkBorderIcon onClick={() => setShow(!show)} />}</div>
+        )
+    }
+
 
     return (
-        <div>
-           <div>
+        <div id="full-screen">
+            <div style={{ display: 'flex', flexDirection: 'row-reverse', gap: '10px' }}>
+                <div>
+                    <CloseFullscreenIcon onClick={handleClick} />
+                </div>
+                <div>
 
-          
-        {show?<BookMark/>:<Form /> }
-         </div>
-        <div className="FPress">
-            <select id="toc"></select>
 
-            <div id="viewer" class="spreads"></div>
-            <a id="prev" href="#prev" class="arrow">‹</a>
-            <a id="next" href="#next" class="arrow">›</a>
-        </div>
-        
+                    {show ? <BookMark /> : <Form />}
+                </div>
+
+            </div>
+            <div className="FPress">
+                <select id="toc"></select>
+
+                <div id="viewer" class="spreads_2"></div>
+                <a id="prev" href="#prev" class="arrow">‹</a>
+                <a id="next" href="#next" class="arrow">›</a>
+            </div>
+
         </div>
     );
 }
 
-export { FPress };
+export { FullScreenbook };

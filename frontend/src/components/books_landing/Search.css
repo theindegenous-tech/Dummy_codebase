@@ -1,0 +1,49 @@
+
+input.MuiInputBase-input.css-yz9k0d-MuiInputBase-input{
+    width: 847px;
+    padding-left: 20px;
+    font-size: 14;
+}
+.dataResult {
+    margin-top: 5px;
+    width:55vw;
+    height: auto;
+    margin-left: 50px;
+    background-color: white;
+    overflow: hidden;
+    overflow-y: auto;
+}
+input.MuiInputBase-input.css-yz9k0d-MuiInputBase-input:focus {
+    outline: none;
+    border: none;
+    
+}
+
+.dataResult::-webkit-scrollbar {
+    display: none;
+}
+
+.dataResult .dataItem {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    color: black;
+}
+
+.dataItem p {
+    margin-left: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: lightgrey;
+}
+
+#clearBtn {
+    cursor: pointer;
+}
+ 

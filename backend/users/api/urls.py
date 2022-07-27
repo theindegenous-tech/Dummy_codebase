@@ -7,8 +7,6 @@ urlpatterns = [
     path('user/', views.userView),
     path('logout/', views.logout_user),
     path('personalisation/<int:pk>/', views.personalisation_detail),
-    path('bookmarks/', views.bookmarks_view),
+    path('bookmarks/', views.bookmarks_list),
     path('bookmarks/<int:pk>/', views.bookmarks_detail),
-    path('locations/', views.locations_view),
-    path('locations/<int:pk>/', views.locations_detail)
 ]

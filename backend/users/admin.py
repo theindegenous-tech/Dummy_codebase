@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import gettext_lazy as _
-from users.models import Bookmark, Location, Personalisation
+from users.models import Bookmark, Personalisation
 from users.models import User
 
 
@@ -32,9 +32,5 @@ class UserAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Bookmark)
-class UserAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(Location)
 class UserAdmin(admin.ModelAdmin):
     pass

@@ -3,11 +3,14 @@ import './style.scss'
 import './Hover.css'
 import axios from "axios";
 import { UserContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import DeleteIcon from '@mui/icons-material/Delete';
 function Mylibrary() { 
 
   const [mylibrarybooks, setmylibrarybooks] = useState([])
-  let { user, setUser, url, setUrl } = useContext(UserContext)
-
+  let { user, setUser,readingbook,setReadingbook } = useContext(UserContext);
+  let navigate = useNavigate(); 
+  let path = `/dashboard/reading1`;   
 
   useEffect(()=>{
     const getBooks = async()=>{
@@ -42,10 +45,33 @@ function Mylibrary() {
     return (<div>{authorString}</div>) 
   }
 
+  // This function remoes book from added mylibrary books
+
+  const mylibraryClick = async(book) => {
+    let librarybooks= user.personalisation.mylibrary;
+    const index = librarybooks.indexOf(book.id);
+    if (index > -1) { // only splice array when item is found
+    librarybooks.splice(index, 1); // 2nd parameter means remove one item only
+    }
+    let mylibrary= mylibrarybooks;
+    const filteredBooks = mylibrary.filter((item) => item.id !== book.id);
+      console.log(filteredBooks);
+      setmylibrarybooks(filteredBooks)
+      // librarybooks.push(book.id)
+      // console.log({...user.personalisation, liked:likedbooks})
+      let res = await axios({
+        method: 'put',
+        url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+        data:{...user.personalisation, mylibrary:librarybooks},
+        withCredentials: true
+      });
+      
+  }
+
 //This function renders all books    
 
 function Items({ currentItems}) {
-    console.log(currentItems);
+    
   return (
    
     <div className="books_container" style={{
@@ -95,6 +121,9 @@ function Items({ currentItems}) {
                 alignItems:'center',
                 backgroundImage:`url(${book.imageurl})`,
                 backgroundSize:'100% 100%'}}>
+                  <div style={{display:'flex',justifyContent:'flex-end'}}>
+                    <DeleteIcon onClick={()=>{mylibraryClick(book)}}/>
+                  </div>
                <div className="book_description" style={{height:'184px',
                   width:'234px',
                   gap:'16px',
@@ -103,7 +132,7 @@ function Items({ currentItems}) {
                   alignItems:'flex-start',
                   padding:'0px',
                   position:'absolute',
-                  marginTop:'50px',
+                  marginTop:'30px',
                   marginLeft:'6px',
                   fontFamily:'Work Sans',
                   fontStyle:'normal',
@@ -115,7 +144,7 @@ function Items({ currentItems}) {
                             This section is all about description of book. Description of book gives us brief idea of what the book is all about and is also one of the main component of book which can either make reader read the book or not.
                </div>
               <button className="book_read_button" style={{position:'absolute',
-                marginTop: '296px',
+                marginTop: '276px',
                 height:'48px',
                 width:'94px',
                 borderRadius:'8px',
@@ -135,7 +164,7 @@ function Items({ currentItems}) {
                 letterSpacing:'0.04em',
                 color:'#428CFB',
                 fontStyle:'normal',
-                textAlign:'center'}} onClick={()=>{setUrl(book.description)}} >READ
+                textAlign:'center'}} onClick={()=>{setReadingbook(book);navigate(path)}} >READ
                           </button>
              </div>
              <div style={{height:'88px',
