@@ -55,7 +55,7 @@ class Bookmark(models.Model):
     id = models.BigAutoField(primary_key=True)
     book_id = models.ForeignKey(Book, default=None , null=True, blank=True, on_delete=models.SET_DEFAULT)
     bookmark_name = models.CharField(blank=True, max_length=255)
-    location = models.JSONField()
+    # location = models.JSONField()
     personalisation = models.ForeignKey(Personalisation, default=None , null=True, blank=True, on_delete=models.CASCADE, related_name='bookmarks')     
     
 # class Location(models.Model):

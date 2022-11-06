@@ -6,15 +6,15 @@ from the_indegenous_backend.api.serializers import BookSerializer
 from the_indegenous_backend.utils import trie
 # Create your views here.
 
-books = Book.objects.all()
-bookArray = BookSerializer(books, many=True).data     # keys to form the trie structure.
-keys=[]
-for book in bookArray:
-    keys.append(book['title'])
-t = trie.Trie()
+# books = Book.objects.all()
+# bookArray = BookSerializer(books, many=True).data     # keys to form the trie structure.
+# keys=[]
+# for book in bookArray:
+#     keys.append(book['title'])
+# t = trie.Trie()
 
-# creating the trie structure with the given set of strings.
-t.formTrie(keys)
+# # creating the trie structure with the given set of strings.
+# t.formTrie(keys)
 
 @api_view(['GET', 'POST'])
 def book_list(request):
@@ -24,6 +24,7 @@ def book_list(request):
     if request.method == 'GET':
         books = Book.objects.all()
         serializer = BookSerializer(books, many=True)
+        print("books",books)
         return Response(serializer.data)
 
     elif request.method == 'POST':
@@ -68,24 +69,24 @@ def search(request):
     #     return response
         
     # key for autocomplete suggestions.
-    key =  request.data['searchkey']    
-    # autocompleting the given key using our trie structure.
-    comp = t.getAutoSuggestions(key)
+    # key =  request.data['searchkey']    
+    # # autocompleting the given key using our trie structure.
+    # comp = t.getAutoSuggestions(key)
 
-    if comp == -1:
-        # No other strings found with this prefix
-        return Response(status=404)
-    elif comp == 0:
-        # No string found with this prefix
-        return Response(status=404)
+    # if comp == -1:
+    #     # No other strings found with this prefix
+    #     return Response(status=404)
+    # elif comp == 0:
+    #     # No string found with this prefix
+    #     return Response(status=404)
 
-    searchResults = []
-    for bookTitle in comp:
-        bookObj = BookSerializer(Book.objects.get(title=bookTitle)).data
-        searchResults.append(bookObj)
+    # searchResults = []
+    # for bookTitle in comp:
+    #     bookObj = BookSerializer(Book.objects.get(title=bookTitle)).data
+    #     searchResults.append(bookObj)
     
-    response.data={
-        "suggestions":searchResults
-    }
+    # response.data={
+    #     "suggestions":searchResults
+    # }
     response.status=201
     return response

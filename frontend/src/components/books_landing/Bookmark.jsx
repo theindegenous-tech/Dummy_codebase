@@ -12,6 +12,7 @@ function Bookmark() {
     if(readingbook){
         url= readingbook.description;
     }
+    
      // This is a hook that runs as soon as the page renders and a url string is recieved to the component as props
     //upon recieving it, a state variable is loaded with the book 
     useEffect(() => {
@@ -163,7 +164,7 @@ function Bookmark() {
      })):<div className="FPress">
             <ArrowBackIcon onClick={()=>{setbookmarkclicked(!bookmarkclicked)}}/>
             <select id="toc"></select>
-            <div id="viewer" class="spreads"></div>
+            <div id="viewer" class="spreads" oncontextmenu="return false;"></div>
             <a id="prev" href="#prev" class="arrow">‹</a>
             <a id="next" href="#next" class="arrow">›</a>
         </div>}

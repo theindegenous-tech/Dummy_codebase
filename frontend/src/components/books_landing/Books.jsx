@@ -20,6 +20,8 @@ function Books() {
     async function getAllBooks() {
       try {
         const Books = await axios.get('http://127.0.0.1:8000/library/')
+        console.log("Books", Books)
+
         setBooks(Books.data)
         setBooksUpdated(true)
       } catch (error) {
@@ -42,11 +44,13 @@ function Books() {
   const [imgval, setimgval] = useState(0);
 
   useEffect(() => {
+    document.addEventListener('contextmenu', event => event.preventDefault());
     const updatedBooks = () => {
       var count = 0;
       let newbooks = books.map((item) => {
         if (item.url) {
-          var desc = window.ePub(item.url);
+          console.log("Books", item)
+          var desc = window.ePub("item.url");
           desc.coverUrl().then((data) => {
             item.imageurl = data;
             count = count + 1;

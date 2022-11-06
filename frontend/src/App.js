@@ -96,7 +96,8 @@ export default function App() {
     }
 
     useEffect(() => {
-
+        
+        document.addEventListener('contextmenu', (e) => { e.preventDefault(); });
         const str = location.pathname;
         var some = str.split('/');
         console.log(some);

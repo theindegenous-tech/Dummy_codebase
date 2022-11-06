@@ -174,7 +174,7 @@ function BookReusable2({ books_props }) {
                   backgroundImage: `url(${book.imageurl})`,
                   backgroundSize: '100% 100%'
                 }}>
-                  <div >
+                  {/* <div >
                     {user.personalisation.liked.includes(book.id) ? <FavoriteIcon style={{cursor:'pointer', color: "red" }}
                       onClick={() => {
                         removeLike(book)
@@ -182,7 +182,7 @@ function BookReusable2({ books_props }) {
                       onClick={() => {
                         likeClick(book)
                       }} />}
-                  </div>
+                  </div> */}
                   <div className="book_description" style={{
                     height: '184px',
                     width: '234px',

@@ -36,7 +36,7 @@ class Publisher(models.Model):
 
 class Book(models.Model):
     id = models.BigAutoField(primary_key=True)
-    isbn = models.PositiveBigIntegerField
+    isbn = models.PositiveIntegerField
     title = models.CharField(max_length=255)
     year = models.PositiveIntegerField(default=current_year(), validators=[MinValueValidator(1), max_value_current_year])
     description = models.TextField()

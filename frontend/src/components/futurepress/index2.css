@@ -36,7 +36,7 @@ body {
 }
 
 #viewer.spreads_2 .epub-view>iframe {
-    background: white;
+    background: rgb(145, 52, 52);
 }
 
 #viewer.scrolled {

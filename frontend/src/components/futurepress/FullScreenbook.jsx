@@ -24,8 +24,9 @@ function FullScreenbook() {
     let browseclick = 0;
     const [nav, setnav] = useState(0);
     let path2 = "/dashboard/reading4";
-
+    document.addEventListener('contextmenu', event => event.preventDefault());
     useEffect(() => {
+        document.addEventListener('contextmenu', event => event.preventDefault());
         if (nav !== 0) {
             navigate(path2);
         }
@@ -40,6 +41,7 @@ function FullScreenbook() {
     // This is a hook that runs as soon as the page renders and a url string is recieved to the component as props
     //upon recieving it, a state variable is loaded with the book 
     useEffect(() => {
+        document.addEventListener('contextmenu', event => event.preventDefault());
         if (readingbook) {
             var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
             var c = (params && params.get("loc")) ? params.get("loc") : undefined;
@@ -176,13 +178,13 @@ function FullScreenbook() {
         }
     }, [currentSectionIndex, book])
 
-    const isFound = user.personalisation.bookmarks.some(element => {
-        if ( _.isEqual(pageLocation, element.location)) {
-            return true;
-        }
+    // const isFound = user.personalisation.bookmarks.some(element => {
+    //     if ( _.isEqual(pageLocation, element.location)) {
+    //         return true;
+    //     }
 
-        return false;
-    });
+    //     return false;
+    // });
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -239,7 +241,7 @@ function FullScreenbook() {
 
     function BookMark() {
         return (
-            <div>{isFound ? <BookmarkIcon onClick={RemoveBookmark} /> : <BookmarkBorderIcon onClick={() => setShow(!show)} />}</div>
+            <div>{1 ? <BookmarkIcon onClick={RemoveBookmark} /> : <BookmarkBorderIcon onClick={() => setShow(!show)} />}</div>
         )
     }
 

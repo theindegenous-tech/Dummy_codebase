@@ -166,7 +166,7 @@ const _URL = typeof URL != "undefined" ? URL : typeof window != "undefined" ? wi
  * @returns {string} uuid
  * @memberof Core
  */
-
+ document.addEventListener('contextmenu', event => event.preventDefault());
 
 function uuid() {
   var d = new Date().getTime();
@@ -808,7 +808,7 @@ function defer() {
    *
    * @param {anything} reason: The reason for the rejection of the Promise.
    * Generally its an Error object. If however a Promise is passed, then the Promise
-   * itself will be the reason for rejection no matter the state of the Promise.
+* itself will be the reason for rejection no matter the state of the Promise.
    */
 
   this.reject = null;
