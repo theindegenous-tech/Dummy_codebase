@@ -3,7 +3,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import {Box} from '@mui/material';
 import React from 'react'
 import './Search.css'
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react'
 import { useEffect } from 'react';
 import axios from 'axios';
