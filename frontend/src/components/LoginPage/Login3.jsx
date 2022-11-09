@@ -21,8 +21,6 @@ function Login_3() {
               
         headers: {
           'Access-Control-Allow-Origin' : '*',
-          'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-          'Access-Control-Allow-Credentials':'true',
           },
         method: 'post',
         url: 'http://142.93.218.227:8000/login/',
