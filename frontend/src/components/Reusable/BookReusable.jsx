@@ -95,7 +95,7 @@ function BookReusable() {
       setBooks(newbooks)
     }
     if(booksupdated) {
-      updatedBooks()
+      // updatedBooks()
       setBooksUpdated(false)
     }
   }, [booksupdated])
@@ -110,16 +110,16 @@ function BookReusable() {
 
   //This function adds new book to likedBooks array if its not there
   const likeClick = async(book) => {
-      // let likedbooks = user.personalisation.liked
-      // likedbooks.push(book.id)
-      // // console.log({...user.personalisation, liked:likedbooks})
-      // let res = await axios({
-      //   method: 'put',
-      //   url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
-      //   data:{...user.personalisation, liked:likedbooks},
-      //   withCredentials: true
-      // });
-      // setLikedBooks(res.data.liked)
+      let likedbooks = user.personalisation.liked
+      likedbooks.push(book.id)
+      // console.log({...user.personalisation, liked:likedbooks})
+      let res = await axios({
+        method: 'put',
+        url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+        data:{...user.personalisation, liked:likedbooks},
+        withCredentials: true
+      });
+      setLikedBooks(res.data.liked)
   }
 
   //This function adds new book to mylibraryBooks array if its not there

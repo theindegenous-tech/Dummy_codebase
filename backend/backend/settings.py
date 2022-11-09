@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['142.93.218.227', 'localhost', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    # 'corsheaders',
+    'corsheaders',
     'rest_framework',
     'users',
     'the_indegenous_backend',
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -111,9 +111,10 @@ AUTH_PASSWORD_VALIDATORS = []
 
 
 #CORS setup
-# CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = [ 'http://localhost:3000','http://142.93.218.227:3000',"http://142.93.218.227:3001"]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = [ 'http://localhost:3000','http://142.93.218.227:3000',"http://142.93.218.227:3001"]
 
+CORS_ALLOW_CREDENTIALS = False
 
 
 # Internationalization

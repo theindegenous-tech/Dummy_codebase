@@ -8,6 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
+// import DropdownMenu from './sort/DropdownMenu'
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -172,8 +173,9 @@ export default function App() {
                     <div style={{ display: 'flex', width: '192px', flexDirection: 'row', alignItems: 'flex-end' }}>
 
                         <button style={{ padding: '0px', marginTop: '22px', backgroundColor: '#428CFB', color: '#FFFFFF', border: 'none', width: '48px', height: '48px', borderRadius: '8px', marginRight: '16px' }} onClick={togglePopup}>
-                            Add Book
+                      Sort By
                         </button>
+                                  {/* <DropdownMenu style={{ marginTop: '8px',}} setsortDrawerTab={setsortDrawerTab}/> */}
 
 
                         {!isprofile ? <Link to="profile">

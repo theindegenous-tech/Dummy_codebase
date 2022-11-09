@@ -2,6 +2,7 @@ import React, { useEffect,useContext } from "react";
 // import  { useState, useEffect, useContext } from "react";
 // import { UserContext } from "../context/AuthContext";
 // import axios from "axios";
+import { ReactComponent as ReactLogo } from "./login.svg";
 import "./Signup.css";
 import { useNavigate } from 'react-router-dom'
 import axios from "axios";
@@ -56,7 +57,7 @@ function Login_1() {
     <div style={{
       alignItems: 'center',
       justifyContent: 'center', textAlign: 'center',
-      marginTop: '184px', height: '71px', width: '635px', marginLeft: '406px', fontFamily: 'Work Sans',
+      marginTop: '54px', height: '71px', width: '635px', marginLeft: '406px', fontFamily: 'Work Sans',
     }}>
       <h2 style={{ margin: 0, fontFamily: 'Work Sans', fontSize: '40px', fontWeight: '700', lineHeight: '47px', letterSpacing: '-0.02em' }}>
         Unlimited books and knowledge.
@@ -90,6 +91,10 @@ function Login_1() {
 
       </form>
     </div>
+    <div className="container">
+
+<ReactLogo />
+  </div>
 
   </div>
   )

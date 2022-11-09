@@ -3,6 +3,7 @@ import React from 'react'
 // import { useEffect } from 'react';
 // import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'
+import { ReactComponent as ReactLogo } from "./login.svg";
 // import { UserContext } from '../context/AuthContext';
 function Login_2() {
 
@@ -26,7 +27,7 @@ function Login_2() {
       <div style={{
         alignItems: 'center',
         justifyContent: 'center', textAlign: 'center',
-        marginTop: '184px', height: '71px', width: '600px', marginLeft: '436px'
+        marginTop: '54px', height: '71px', width: '600px', marginLeft: '436px'
       }}>
         <h2 style={{ margin: 0, fontFamily: 'Work Sans', fontSize: '40px', fontWeight: '700', lineHeight: '47px', letterSpacing: '-0.02em', fontStyle: 'normal' }}>
           Finish setting up your account.
@@ -48,6 +49,10 @@ function Login_2() {
           NEXT
         </button>
       </div>
+      <div className="container">
+
+<ReactLogo />
+  </div>
     </div>
   )
 }
