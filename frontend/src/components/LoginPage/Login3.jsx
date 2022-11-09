@@ -17,9 +17,17 @@ function Login_3() {
 
     var { email, password } = document.forms[0];
     try {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT fefege...'
+      } 
       let res = await axios({
+        headers: {
+          'Access-Control-Allow-Origin' : '*',
+          'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
         method: 'post',
-        url: 'http://localhost:8000/login/',
+        url: 'http://142.93.218.227:8000/login/',
         data: {
           email: email.value,
           password: password.value
