@@ -30,7 +30,7 @@ function Login_3() {
           email: email.value,
           password: password.value
         },
-        withCredentials:true
+        withCredentials:false
       });
       setUser(res.data)
       if(user) {
