@@ -112,10 +112,8 @@ AUTH_PASSWORD_VALIDATORS = []
 
 #CORS setup
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000','http://142.93.218.227:3000',"http://142.93.218.227:3001"
-)
-CORS_ALLOW_CREDENTIALS = False
+CORS_ORIGIN_WHITELIST = [ 'http://localhost:3000','http://142.93.218.227:3000',"http://142.93.218.227:3001"]
+
 
 
 # Internationalization
