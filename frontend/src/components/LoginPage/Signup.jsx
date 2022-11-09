@@ -23,7 +23,7 @@ function Signup() {
     try {
      let signedupUserDetails= await axios({
         method: 'post',
-        url: 'http://localhost:8000/signup/',
+        url: 'http://142.93.218.227:8000/signup/',
         data: {
           first_name:firstname.value,
           last_name:lastname.value,

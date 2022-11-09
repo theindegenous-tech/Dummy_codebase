@@ -19,7 +19,7 @@ function Login_3() {
     try {
       let res = await axios({
         method: 'post',
-        url: 'http://localhost:8000/login/',
+        url: 'http://142.93.218.227:8000/login/',
         data: {
           email: email.value,
           password: password.value
