@@ -26,8 +26,6 @@ SECRET_KEY = 'django-insecure-cn)99qrkgcut-nsx*4$43gbq68rj4-a-^1_)t4_jwv)x1z5i#=
 DEBUG = True
 
 ALLOWED_HOSTS = ['142.93.218.227', 'localhost', '127.0.0.1']
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -84,7 +82,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'library', 
-        'USER': 'postgres', 
+        'USER': 'admin', 
         'PASSWORD': 'admin',
         'HOST': '127.0.0.1', 
         'PORT': '5432',
