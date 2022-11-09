@@ -18,6 +18,7 @@ function Login_3() {
     var { email, password } = document.forms[0];
     try {
             let res = await axios({
+              
         headers: {
           'Access-Control-Allow-Origin' : '*',
           'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
