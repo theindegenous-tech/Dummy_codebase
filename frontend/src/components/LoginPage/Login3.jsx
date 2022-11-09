@@ -20,7 +20,11 @@ function Login_3() {
             let res = await axios({
               
         headers: {
+          "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
           'Access-Control-Allow-Origin' : '*',
+          'Access-Control-Allow-Credentials' : 'true',
+          "Access-Control-Allow-Methods":"GET,HEAD,OPTIONS,POST,PUT",
+
           },
         method: 'post',
         url: 'http://142.93.218.227:8000/login/',
@@ -64,7 +68,7 @@ function Login_3() {
         marginTop: '184px', height: '75px', width: '828px', marginLeft: '339px'
       }}>
         <h2 style={{ margin: 0, fontFamily: 'Work Sans', fontSize: '40px', fontWeight: '700', lineHeight: '47px', letterSpacing: '-0.02em' }}>
-          Create password to start membership
+          Create password to start membership ok
         </h2>
         <h3 style={{ margin: 0, fontFamily: 'Work Sans', fontSize: '24px', fontWeight: '500', lineHeight: '28px', color: '#0E0E2C' }}>
           Just a few more steps and you're finished!
