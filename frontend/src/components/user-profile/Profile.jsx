@@ -25,7 +25,7 @@ function Profile() {
     try {
       let res = await axios({
         method: 'post',
-        url: 'http://localhost:8000/logout/',
+        url: 'http://142.93.218.227:8000/logout/',
         
         withCredentials: true
       });

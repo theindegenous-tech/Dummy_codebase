@@ -17,7 +17,7 @@ function Mylibrary() {
       let books = await Promise.all(user.personalisation.mylibrary.map(async(bookID)=>{
         let res = await axios({
           method: 'get',
-          url: 'http://localhost:8000/library/' + bookID + '/',
+          url: 'http://142.93.218.227:8000/library/' + bookID + '/',
         });
         return res.data
       }))
@@ -61,7 +61,7 @@ function Mylibrary() {
       // console.log({...user.personalisation, liked:likedbooks})
       let res = await axios({
         method: 'put',
-        url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+        url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
         data:{...user.personalisation, mylibrary:librarybooks},
         withCredentials: true
       });

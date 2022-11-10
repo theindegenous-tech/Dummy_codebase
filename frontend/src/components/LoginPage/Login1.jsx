@@ -18,7 +18,7 @@ function Login_1() {
       try{
         let res = await axios({
           method:'get',
-          url:'http://localhost:8000/user/',
+          url:'http://142.93.218.227:8000/user/',
           withCredentials:true
         })
         if(res.status === 200) {

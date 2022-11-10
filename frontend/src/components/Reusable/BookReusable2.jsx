@@ -70,14 +70,14 @@ function BookReusable2({ books_props }) {
     // console.log({...user.personalisation, liked:likedbooks})
     let res = await axios({
       method: 'put',
-      url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+      url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
       data:{...user.personalisation, liked:likedbooks},
       withCredentials: true
     });
     if(res.status === 200) {
       res = await axios({
         method: 'get',
-        url: 'http://localhost:8000/user/',
+        url: 'http://142.93.218.227:8000/user/',
         withCredentials: true
       })
       setUser(res.data)
@@ -87,14 +87,14 @@ function BookReusable2({ books_props }) {
     let likedbooks = user.personalisation.liked.filter(b=>b!=book.id)
     let res = await axios({
       method: 'put',
-      url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+      url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
       data:{...user.personalisation, liked:likedbooks},
       withCredentials: true
     });
     if(res.status === 200) {
       res = await axios({
         method: 'get',
-        url: 'http://localhost:8000/user/',
+        url: 'http://142.93.218.227:8000/user/',
         withCredentials: true
       })
       setUser(res.data)
@@ -110,7 +110,7 @@ function BookReusable2({ books_props }) {
     }
     let res = await axios({
       method: 'put',
-      url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+      url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
       data:{...user.personalisation, mylibrary:librarybooks},
       withCredentials: true
     });

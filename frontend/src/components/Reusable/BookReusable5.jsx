@@ -116,7 +116,7 @@ function BookReusable5() {
       // // console.log({...user.personalisation, liked:likedbooks})
       // let res = await axios({
       //   method: 'put',
-      //   url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+      //   url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
       //   data:{...user.personalisation, liked:likedbooks},
       //   withCredentials: true
       // });
@@ -133,7 +133,7 @@ function BookReusable5() {
       // // console.log({...user.personalisation, liked:likedbooks})
       // let res = await axios({
       //   method: 'put',
-      //   url: 'http://localhost:8000/personalisation/'+user.personalisation.id+'/',
+      //   url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
       //   data:{...user.personalisation, mylibrary:librarybooks},
       //   withCredentials: true
       // });

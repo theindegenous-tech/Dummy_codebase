@@ -68,7 +68,7 @@ function Search() {
     try{
       let res = await axios({
         method:'post',
-        url:'http://localhost:8000/library/search/',
+        url:'http://142.93.218.227:8000/library/search/',
         data:{
           "searchkey":searchBarText
         }

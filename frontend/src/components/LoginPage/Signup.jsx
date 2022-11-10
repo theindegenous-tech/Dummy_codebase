@@ -47,7 +47,7 @@ function Signup() {
       try {
         let userDetails= await axios({
           method: 'post',
-          url: 'http://localhost:8000/login/',
+          url: 'http://142.93.218.227:8000/login/',
           data: {
             email: signup.email,
             password: signup.password
