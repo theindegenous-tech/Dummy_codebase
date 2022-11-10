@@ -57,7 +57,7 @@ function BookReusable5() {
  useEffect(() => {
     async function getAllBooks() {
       try {
-        const Books = await axios.get('http://127.0.0.1:8000/library/')
+        const Books = await axios.get('http://142.93.218.227:8000/library/')
         setBooks(Books.data)
         setBooksUpdated(true)
       } catch (error) {
