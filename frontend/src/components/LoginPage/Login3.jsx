@@ -21,7 +21,7 @@ function Login_3() {
             let res = await axios({
 
         method: 'post',
-        url: 'http://127.0.0.1:8000/login/',
+        url: 'http://142.93.218.227:8000/login/',
         data: {
           email: email.value,
           password: password.value
