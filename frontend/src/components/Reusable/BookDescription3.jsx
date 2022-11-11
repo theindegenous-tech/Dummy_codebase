@@ -18,7 +18,7 @@ function BookDescription3({ book }) {
           <div style={{ marginTop: '40px', height: '209px', width: '561px', display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 'none', order: 1, flexGrow: 0, alignSelf: 'stretch' }}>
             <div style={{ height: '44px', width: '561px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 'none', order: 1, flexGrow: 0, alignSelf: 'stretch', padding: 0, gap: '10px' }}>
               <p style={{ height: '28px', width: '561px', fontFamily: 'Work Sans', fontSize: '16px', fontWeight: '500', lineHeight: '22px', letterSpacing: '-2%', color: '#0E0E2C', alignItems: 'flex-start', flex: 'none', order: 1, flexGrow: 0, alignSelf: 'stretch', margin: 0 }}>
-                {book.author[0].first_name + " " + book.author[0].last_name}
+                {/* {book.author[0].first_name + " " + book.author[0].last_name} */}
 
               </p>
 

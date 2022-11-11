@@ -32,7 +32,7 @@ function BookDescription2() {
                 </div>
                 <div style={{width:'104px', height:'44px', marginTop:'16px', marginLeft:'24px'}}>
                         <p style={{margin:0,fontFamily: 'Work Sans',fontSize:'16px',fontWeight:'500',lineHeight:'22.4px',letterSpacing:'-2%', color:'#4A4A68'}}>
-                            {readingbook.author[0].first_name}
+                            {/* {readingbook.author[0].first_name} */}
                             <br/>
                             {readingbook.year}
                         </p>
