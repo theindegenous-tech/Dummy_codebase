@@ -4,6 +4,17 @@ from rest_framework.exceptions import AuthenticationFailed
 from users.models import Bookmark, Personalisation, User
 from users.api.serializers import BookmarkSerializer, UserSerializer, PersonalisationSerializer
 import jwt, datetime
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
+
+
+# Generate Token Manually
+def get_tokens_for_user(user):
+  refresh = RefreshToken.for_user(user)
+  return {
+      'refresh': str(refresh),
+      'access': str(refresh.access_token),
+  }
 
 # Login a user.
 @api_view(['POST','OPTION'])
@@ -24,19 +35,29 @@ def login_user(request):
         'iat':datetime.datetime.now()
     }
 
-    token = jwt.encode(payload, 'secret', algorithm='HS256')
+    # token = jwt.encode(payload, 'secret', algorithm='HS256')
+    token = get_tokens_for_user(user)
     response = Response()
     response.set_cookie(key='jwt', value=token, samesite=None, httponly=True)
-    response.data=serializer.data
+    response.data=serializer.data,token 
+    # response.token=token
     return response
 
 #Signup a user.
 @api_view(['POST'])
 def signup_user(request):
-    serializer = UserSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-    return Response(serializer.data)
+        print("token",request.data)
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print("serializer.errors",serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # return Response({'token':token, 'msg':'Registration Successful'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.data)
+
 
 # Retrieve info about whether a user is logged in or not.
 @api_view(['GET'])

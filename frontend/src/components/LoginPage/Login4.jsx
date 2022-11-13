@@ -1,6 +1,7 @@
 import React from "react";
 // import { UserContext } from "../context/AuthContext";
 import {  useNavigate } from 'react-router-dom'
+import { ReactComponent as ReactLogo } from "./login.svg";
 function Login4() {
   let navigate = useNavigate(); 
   const handleSubmit = async (e) => {
@@ -15,18 +16,30 @@ function Login4() {
   };
 
 
-  
-
+  const handleClick = () => {
+    let path = `/signup`;
+    navigate(path);
+  }
   
   return (
     <div style={{height:'1024px',width:'1447px'}}>
-            <div style={{display:'flex'}}>
-                <h1 style={{marginLeft:'31px',width:'172px',height:'75px',fontFamily: 'Work Sans',fontSize:'64px',fontWeight:'700',  lineHeight:'75px', letterSpacing:'-0.02em', color:'#0E0E2C', marginTop:'24px', marginBottom:0}}>
-                    Gyani
-                </h1>
-                <button onClick={()=>navigate("/")} style={{cursor:'pointer', marginLeft:'1058px', width:'113px', height:'48px',marginTop:'37px',border:'1px solid #EFEFFD', background:'#FFFFFF', borderRadius:'8px', color:'#428CFB',padding:'12px 24px'}}>
-                    SIGN IN
-                </button>
+                <div style={{ display: 'flex' ,    justifyContent: 'space-between'}}>
+        <h1 style={{ marginLeft: '31px', width: '172px', height: '75px', fontFamily: 'Work Sans', fontSize: '64px', fontWeight: '700', lineHeight: '75px', letterSpacing: '-0.02em', color: '#0E0E2C', marginTop: '24px', marginBottom: 0 ,pointer:'cursor'}}>
+      <a href='/' style={{color:'black'}}>
+      Gyani
+        </a>     
+        </h1>
+      
+        <div className="row">
+
+        <button onClick={(e) => {e.preventDefault();navigate("/login/email")}} style={{cursor:'pointer', width: '113px', height: '48px', marginTop: '37px', border: '1px solid #EFEFFD', background: '#FFFFFF', borderRadius: '8px', color: '#428CFB', padding: '12px 24px' }}>
+          SIGN IN
+        </button>
+        <button onClick={handleClick} style={{cursor:'pointer', width: '113px', height: '48px', marginTop: '37px', border: '1px solid #EFEFFD', background: '#FFFFFF', borderRadius: '8px', color: '#428CFB', padding: '12px 24px' }}>
+        SIGN UP
+      </button>
+
+        </div>
           </div>
 
       <div style={{
@@ -57,6 +70,10 @@ function Login4() {
         </div>
         </form>
       </div>
+      <div className="container">
+
+<ReactLogo />
+  </div>
        
     </div>
   )

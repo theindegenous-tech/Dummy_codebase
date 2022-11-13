@@ -1,107 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "../context/AuthContext";
-import { ReactComponent as ReactLogo } from "./login.svg";
-import axios from "axios";
-import "./Signup.css";
-import { useLocation, useNavigate } from 'react-router-dom'
-import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Button from '@mui/material/Button';
-import MuiAlert from '@mui/material/Alert';
-import jwt_decode from "jwt-decode";
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-function Login_3() {
-
-  const [open, setOpen] = React.useState(false);
-  const [open_suc, setopen_suc] = React.useState(false);
-
-  const [loading, setLoading] = useState(true);
-
-  const { state } = useLocation()
-  const { email } = state
-  let { user, setUser } = useContext(UserContext);
-
-
-  let navigate = useNavigate();
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-  };
-  const handleClose_success = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    open_suc(false);
-  };
-
-  const vertical = 'top';
-  const horizontal = 'right'
-
-  const handleSubmit = async (e) => {
-
-    //Prevent page reload
-    e.preventDefault();
-
-    var { email, password } = document.forms[0];
-    try {
-            let res = await axios({
-
-        method: 'post',
-        url: 'http://142.93.218.227:8000/login/',
-        data: {
-          email: email.value,
-          password: password.value
-        },
-
-      });
-      console.log("res",res)
-      console.log("token",res.data[1]['access'])
-      localStorage.setItem('token',res.data[1]['access'])
-      setopen_suc(true)
-      setUser(res.data)
-      if(user) {
-        navigate("/dashboard/home")
-      }
-
-    } catch (error) {
-      setOpen(true) 
-      console.log(error)
-    }
-
-  };
-
-
-  
-  const handleClick = () => {
-    let path = `/signup`;
-    navigate(path);
-  }
-
-  const action = (
-    <React.Fragment>
-    
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
-  return (
-    <div style={{ height: '1024px', width: '1447px' }}>
+<div style={{ height: '1024px', width: '1447px' }}>
       <div style={{ display: 'flex' ,    justifyContent: 'space-between'}}>
         <h1 style={{ marginLeft: '31px', width: '172px', height: '75px', fontFamily: 'Work Sans', fontSize: '64px', fontWeight: '700', lineHeight: '75px', letterSpacing: '-0.02em', color: '#0E0E2C', marginTop: '24px', marginBottom: 0 }}>
         <a href='/' style={{color:'black'}}>
@@ -139,6 +36,10 @@ function Login_3() {
       <div style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: '8px', marginTop: '28px' }}>
         <form method="POST" onSubmit={handleSubmit}>
           <div style={{ marginLeft: '423px', display: 'flex', flexDirection: 'column', alignItems: 'flexstart' }}>
+            <input type="text" name="firstname"  placeholder="First Name" style={{ width: '659px', border: 'none', marginLeft: 0, height: '48px', marginTop: '22px', borderRadius: '8px', backgroundColor: '#ECF1F4', boxShadow: 'inset 0px 2px 2px -1px rgba(74, 74, 104, 0.1)', flex: 'none', order: 1, alignSelf: 'stretch', flexGrow: 0 }}>
+            </input>
+            <input type="text" name="lastname" placeholder="Last Name" style={{ width: '659px', marginTop: '22px', border: 'none', marginLeft: 0, height: '48px', borderRadius: '8px', backgroundColor: '#ECF1F4', boxShadow: 'inset 0px 2px 2px -1px rgba(74, 74, 104, 0.1)', flex: 'none', order: 1, alignSelf: 'stretch', flexGrow: 0 }}>
+            </input>
             <input type="email" name="email" defaultValue={email} placeholder="EMAIL ADDRESS" style={{ width: '659px', border: 'none', marginLeft: 0, height: '48px', marginTop: '22px', borderRadius: '8px', backgroundColor: '#ECF1F4', boxShadow: 'inset 0px 2px 2px -1px rgba(74, 74, 104, 0.1)', flex: 'none', order: 1, alignSelf: 'stretch', flexGrow: 0 }}>
             </input>
             <input type="password" name="password" placeholder="PASSWORD" style={{ width: '659px', marginTop: '22px', border: 'none', marginLeft: 0, height: '48px', borderRadius: '8px', backgroundColor: '#ECF1F4', boxShadow: 'inset 0px 2px 2px -1px rgba(74, 74, 104, 0.1)', flex: 'none', order: 1, alignSelf: 'stretch', flexGrow: 0 }}>
@@ -170,7 +71,3 @@ function Login_3() {
   </div>
 
     </div>
-  )
-}
-
-export default Login_3

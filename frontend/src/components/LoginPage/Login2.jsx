@@ -14,15 +14,30 @@ function Login_2() {
   const { email } = state; 
   let path = `/signin`;
 
+  const handleClick = () => {
+    let path = `/signup`;
+    navigate(path);
+  } 
+
   return (
     <div style={{ height: '1024px', width: '1447px' }}>
-      <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex' ,    justifyContent: 'space-between'}}>
         <h1 style={{ marginLeft: '31px', width: '172px', height: '75px', fontFamily: 'Work Sans', fontSize: '64px', fontWeight: '700', lineHeight: '75px', letterSpacing: '-0.02em', color: '#0E0E2C', marginTop: '24px', marginBottom: 0 }}>
-          Gyani
+        <a href='/' style={{color:'black'}}>
+      Gyani
+        </a>    
         </h1>
-        <button onClick={() => navigate("/login/email")} style={{cursor:'pointer', marginLeft: '1058px', width: '113px', height: '48px', marginTop: '37px', border: '1px solid #EFEFFD', background: '#FFFFFF', borderRadius: '8px', color: '#428CFB', padding: '12px 24px' }}>
+      
+        <div className="row">
+
+        <button onClick={(e) => {e.preventDefault();navigate("/login/email")}} style={{cursor:'pointer', width: '113px', height: '48px', marginTop: '37px', border: '1px solid #EFEFFD', background: '#FFFFFF', borderRadius: '8px', color: '#428CFB', padding: '12px 24px' }}>
           SIGN IN
         </button>
+        <button onClick={handleClick} style={{cursor:'pointer', width: '113px', height: '48px', marginTop: '37px', border: '1px solid #EFEFFD', background: '#FFFFFF', borderRadius: '8px', color: '#428CFB', padding: '12px 24px' }}>
+        SIGN UP
+      </button>
+
+        </div>
       </div>
       <div style={{
         alignItems: 'center',
