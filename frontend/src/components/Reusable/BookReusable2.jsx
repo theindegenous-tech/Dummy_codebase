@@ -10,6 +10,7 @@ import { UserContext } from '../context/AuthContext';
 import SortByLanguage from "../sort/SortByLanguage";
 import SortByTitle from "../sort/SortByTitle";
 import { SortByAuthor } from '../sort/SortByAuthor'
+import LinesEllipsis from 'react-lines-ellipsis'
 
 
 
@@ -202,7 +203,15 @@ function BookReusable2({ books_props }) {
                     letterSpacing: '-0.02em',
                     color: '#',
                   }}>
-                    {book.description}
+                    {book.description.length > 20 ?  book.description.substr(book.description.length - 26)+"..." : book.description}
+                         {/* <LinesEllipsis
+  text=              {book.description}
+  maxLine='1'
+  ellipsis='...'
+  trimRight
+  basedOn='letters'
+/> */}
+        
                     {/* This section is all about description of book. Description of book gives us brief idea of what the book is all about and is also one of the main component of book which can either make reader read the book or not. */}
                   </div>
                   <button className="book_read_button" style={{
@@ -245,26 +254,16 @@ function BookReusable2({ books_props }) {
                   alignSelf: 'stretch',
                   flexGrow: '0',
                 }}>
-                  <h2 style={{
-                    textAlign: 'left',
-                    color: '#0E0E2C',
-                    width: '246px',
-                    height: '28px',
-                    marginTop: '4px',
-                    marginBottom: '0px',
-                    fontFamily: 'Work Sans',
-                    fontStyle: 'normal',
-                    fontWeight: '600',
-                    fontSize: '17px',
-                    lineHeight: '28px',
-                    letterSpacing: '-0.02em',
-                    flex: 'none',
-                    order: '0',
-                    alignSelf: 'stretch',
-                    flexGrow: '0',
-                  }}>
-                    {book.title}
-                  </h2>
+     <LinesEllipsis
+  text=     {book.title}
+  maxLine='2'
+  ellipsis='...'
+  trimRight
+  basedOn='letters'
+/>
+
+               
+                  
                   <div style={{
                     width: '246px',
                     height: '44px',
