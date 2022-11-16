@@ -16,6 +16,7 @@ import Login1 from './components/LoginPage/Login1';
 import Login2 from './components/LoginPage/Login2'
 import Login3 from './components/LoginPage/Login3'
 import { FullScreenbook } from './components/futurepress/FullScreenbook';
+import { DisplayPDF } from './components/futurepress/DisplayPDF';
 import Login4 from './components/LoginPage/Login4'
 
 
@@ -34,6 +35,7 @@ root.render(
           <Route exact path="/login/email" element={<Login4/>} />
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/readbook" element={<FullScreenbook />} />
+          <Route exact path="/displaypdf" element={<DisplayPDF />} />
           <Route exact path="/dashboard/*" element={
             <PrivateRoute><App /></PrivateRoute>} >
           </Route>

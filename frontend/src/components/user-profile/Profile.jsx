@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/AuthContext';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 function Profile() {
   let navigate = useNavigate(); 
   let{user,setUser}= useContext(UserContext)
@@ -29,11 +31,13 @@ function Profile() {
         
         withCredentials: true
       });
-      if(res.data.message === 'success') {
+      if(res.status ==200) {
         setUser(null)
         navigate('/login')
       }
     } catch (error) {
+
+      console.log("error")
       console.log(error)
     }
   }
@@ -45,7 +49,8 @@ function Profile() {
             <img src="https://compote.slate.com/images/a92fef3e-c1db-4cbf-93da-dae90c0b9388.jpeg?width=1200&rect=4395x2930&offset=0x0" style={{width:'200px',height:'200px',marginTop:'10px',borderRadius:'50%'}}/>
           </div>
             <div>
-              <button onClick={handleClick}>SignOut</button>
+            <Button variant="outlined" color="error" onClick={handleClick}>
+             SignOut</Button>
               </div>
             
         </div>
@@ -53,22 +58,23 @@ function Profile() {
             <form method="POST"  >
                 <div className="input-container">
                 <label>Firstname </label>
-                <input type="text" name="fname" value={firstname} onChange={(e) => setfirstName(e.target.value)}/>
+                <TextField type="text" name="fname" value={firstname} onChange={(e) => setfirstName(e.target.value)}/>
                 </div>
                 <div className="input-container">
                 <label>Lastname </label>
-                <input type="text" name="lname" value={lastname} onChange={(e) => setlastName(e.target.value)}/>
+                <TextField type="text" name="lname" value={lastname} onChange={(e) => setlastName(e.target.value)}/>
                 </div>
                 <div className="input-container">
                 <label>Email </label>
-                <input type="email" name="uname" value={email} onChange={(e) => setEmail(e.target.value)}/> 
+                <TextField type="email" name="uname" value={email} onChange={(e) => setEmail(e.target.value)}/> 
                 </div>
                 <div className="input-container">
                 <label>Password </label>
-                <input type="password" name="pass"  value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <TextField type="password" name="pass"  value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </div>
                 <div className="button-container">
-                <button>Update</button>
+                <Button variant="contained" >Update</Button>
+ 
                 </div>
               </form>
         </div>

@@ -5,6 +5,7 @@ import { FpressBeforeLogin } from '../futurepress/FpressBeforeLogin'
 import { UserContext } from '../context/AuthContext';
 import { useContext } from 'react';
 import "../books_landing/Hover.css"
+import Cover_pdf from '../LoginPage/Cover_pdf'; 
 
 function BookDescription4() {
         let browseclick=0;
@@ -55,6 +56,7 @@ function BookDescription4() {
 
         </div>
 
+        {/* <Cover_pdf/> */}
     </div>
   )
 }

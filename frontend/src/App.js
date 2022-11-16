@@ -180,11 +180,11 @@ export default function App() {
 
                         {!isprofile ? <Link to="profile">
                             <button style={{ marginRight: '16px', marginTop: '22px', width: '48px', height: '48px', backgroundColor: '#31D0AA', color: '#FFFFFF', border: 'none', borderRadius: '8px', boxShadow: 'none' }} onClick={() => setisprofile(!isprofile)} >
-                                {user.first_name.charAt(0)}
+                                {/* {user.first_name.charAt(0)} */}
                             </button>
                         </Link> : <Link to="home">
                             <button style={{ marginRight: '16px', marginTop: '22px', width: '48px', height: '48px', backgroundColor: '#31D0AA', color: '#FFFFFF', border: 'none', borderRadius: '8px', boxShadow: 'none' }} onClick={() => setisprofile(!isprofile)} >
-                                {user.first_name.charAt(0)}
+                                {/* {user.first_name.charAt(0)} */}
                             </button>
                         </Link>}
 

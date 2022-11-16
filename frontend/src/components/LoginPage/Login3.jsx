@@ -9,12 +9,20 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
 import MuiAlert from '@mui/material/Alert';
+import { Document, Page } from 'react-pdf';
+import Sample from './Sample'; 
+import Cover_pdf from './Cover_pdf'; 
+
+// // import Pdf from "react-pdf";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 function Login_3() {
+  const [file, setFile] = useState('sample.pdf');
+  const [numPages, setNumPages] = useState(null);
+  const [page, setPage] = useState(1);
 
   const [open, setOpen] = React.useState(false);
   const [open_suc, setopen_suc] = React.useState(false);
@@ -25,6 +33,14 @@ function Login_3() {
   const { email } = state
   let { user, setUser } = useContext(UserContext);
 
+
+  function onFileChange(event) {
+    setFile(event.target.files[0]);
+  }
+
+  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
+    setNumPages(nextNumPages);
+  }
 
   let navigate = useNavigate();
 
@@ -46,6 +62,12 @@ function Login_3() {
   const vertical = 'top';
   const horizontal = 'right'
 
+  const options = {
+    cMapUrl: 'cmaps/',
+    cMapPacked: true,
+    standardFontDataUrl: 'standard_fonts/',
+  };
+
   const handleSubmit = async (e) => {
 
     //Prevent page reload
@@ -56,7 +78,7 @@ function Login_3() {
             let res = await axios({
 
         method: 'post',
-        url: 'http://142.93.218.227:8000/login/',
+        url: 'http://127.0.0.1:8000/login/',
         data: {
           email: email.value,
           password: password.value
@@ -167,6 +189,9 @@ function Login_3() {
 
 <ReactLogo />
   </div>
+
+  <Cover_pdf/>
+ 
 
     </div>
   )

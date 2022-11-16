@@ -2,7 +2,11 @@
 import React, { useEffect, useState, useContext } from 'react'
 import {  useNavigate } from 'react-router-dom'
 import { UserContext } from '../context/AuthContext';
+import Sample from '../LoginPage/Sample'; 
+import Cover_pdf from '../LoginPage/Cover_pdf'; 
+import { pdfjs } from 'react-pdf';
 
+pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
 function BookDescription() {
         let browseclick=0;
         const [nav, setnav]= useState(0);
@@ -46,14 +50,16 @@ function BookDescription() {
                         BROWSE
                 </button>
 
-        </div>
-        <div style={{display:'flex',flexDirection:'row',justifyContent:'center', alignItems:'flex-start',flex: 'none',order: 1,flexGrow: 1, padding:'12px 24px',width:'519px', height:'480px', gap:'10px',borderRadius:'8px', marginLeft:'48px'}}>
+        </div> 
+        {/* <div style={{display:'flex',flexDirection:'row',justifyContent:'center', alignItems:'flex-start',flex: 'none',order: 1,flexGrow: 1, padding:'12px 24px',width:'519px', height:'480px', gap:'10px',borderRadius:'8px', marginLeft:'48px'}}>
             <div style={{width:'320px', height:'480px',flex: 'none',order: 0,flexGrow: 0,backgroundImage: `url(${readingbook.imageurl})`,
                   backgroundSize: '100% 100%'}}>
 
-            </div>
+            </div> */}
+              <Cover_pdf/>
+              {/* <Sample/>  */}
 
-        </div>
+        {/* </div> */}
 
     </div>:<></>
   )

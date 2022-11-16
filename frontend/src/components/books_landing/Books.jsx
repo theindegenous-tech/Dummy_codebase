@@ -19,7 +19,7 @@ function Books() {
   useEffect(() => {
     async function getAllBooks() {
       try {
-        const Books = await axios.get('http://142.93.218.227:8000/library/')
+        const Books = await axios.get('http://127.0.0.1:8000/library/')
         console.log("Books", Books)
 
         setBooks(Books.data)
@@ -32,13 +32,13 @@ function Books() {
   }, [])
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "/epub.js";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    }
+    // const script = document.createElement('script');
+    // script.src = "/epub.js";
+    // script.async = true;
+    // document.body.appendChild(script);
+    // return () => {
+    //   document.body.removeChild(script);
+    // }
   }, []);
   //This hook maps the book array and adds one more property to array of object namely imgurl which is used to display as icon of book
   const [imgval, setimgval] = useState(0);
