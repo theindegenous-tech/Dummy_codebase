@@ -55,7 +55,7 @@ function BookReusable3() {
  useEffect(() => {
     async function getAllBooks() {
       try {
-        const Books = await axios.get('http://142.93.218.227:8000/library/')
+        const Books = await axios.get('http://64.227.182.173:8000/library/')
         setBooks(Books.data)
         setBooksUpdated(true)
       } catch (error) {
@@ -114,7 +114,7 @@ function BookReusable3() {
       // // console.log({...user.personalisation, liked:likedbooks})
       // let res = await axios({
       //   method: 'put',
-      //   url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
+      //   url: 'http://64.227.182.173:8000/personalisation/'+user.personalisation.id+'/',
       //   data:{...user.personalisation, liked:likedbooks},
       //   withCredentials: true
       // });
@@ -131,7 +131,7 @@ function BookReusable3() {
       // // console.log({...user.personalisation, liked:likedbooks})
       // let res = await axios({
       //   method: 'put',
-      //   url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
+      //   url: 'http://64.227.182.173:8000/personalisation/'+user.personalisation.id+'/',
       //   data:{...user.personalisation, mylibrary:librarybooks},
       //   withCredentials: true
       // });

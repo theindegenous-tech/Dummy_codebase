@@ -43,7 +43,7 @@ function Signup() {
       console.log("firstname.value",password.value)
      let signedupUserDetails= await axios({
         method: 'post',
-        url: 'http://142.93.218.227:8000/signup/',
+        url: 'http://64.227.182.173:8000/signup/',
         data: {
           first_name:firstname.value,
           last_name:lastname.value,
@@ -86,7 +86,7 @@ function Signup() {
       try {
         let userDetails= await axios({
           method: 'post',
-          url: 'http://142.93.218.227:8000/login/',
+          url: 'http://64.227.182.173:8000/login/',
           data: {
             email: signup.email,
             password: signup.password

@@ -19,7 +19,7 @@ function Books() {
   useEffect(() => {
     async function getAllBooks() {
       try {
-        const Books = await axios.get('http://127.0.0.1:8000/library/')
+        const Books = await axios.get('http://64.227.182.173:8000/library/')
         console.log("Books", Books)
 
         setBooks(Books.data)

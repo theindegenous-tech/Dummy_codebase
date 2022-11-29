@@ -22,7 +22,7 @@ function LikedBooks() {
       let books = await Promise.all(user.personalisation.liked.map(async(bookID)=>{
         let res = await axios({
           method: 'get',
-          url: 'http://142.93.218.227:8000/library/' + bookID + '/',
+          url: 'http://64.227.182.173:8000/library/' + bookID + '/',
         });
         return res.data
       }))
@@ -63,7 +63,7 @@ function LikedBooks() {
       setLikedBooks(filteredBooks)
       let res = await axios({
         method: 'put',
-        url: 'http://142.93.218.227:8000/personalisation/'+user.personalisation.id+'/',
+        url: 'http://64.227.182.173:8000/personalisation/'+user.personalisation.id+'/',
         data:{...user.personalisation, liked:likedbooks},
         withCredentials: true
       });

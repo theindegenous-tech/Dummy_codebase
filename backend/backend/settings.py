@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'library', 
-        'USER': 'admin', 
-        'PASSWORD': 'admin',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'NAME': 'defaultdb', 
+        'USER': 'doadmin', 
+        'PASSWORD': 'AVNS_RCeNg6wvaknnSmFUmDy',
+        'HOST': 'ebooks-pdf-database-do-user-12810010-0.b.db.ondigitalocean.com', 
+        'PORT': '25060',
     }
 }
 

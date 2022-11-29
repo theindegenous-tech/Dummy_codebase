@@ -49,7 +49,7 @@ function FullScreenbook() {
             var c = (params && params.get("loc")) ? params.get("loc") : undefined;
             setCurrentSectionIndex(c)
             console.log("readingbook.url",readingbook.url)
-            var b = window.ePub(readingbook.url);
+            // var b = window.ePub(readingbook.url);
             setBook(readingbook.url)
             setbookpdf(readingbook.url)
         }
@@ -201,13 +201,13 @@ function FullScreenbook() {
         data['personalisation'] = user.personalisation.id
         let res = await axios({
             method: 'post',
-            url: 'http://142.93.218.227:8000/bookmarks/',
+            url: 'http://64.227.182.173:8000/bookmarks/',
             data: data,
         });
         if(res.status === 201) {
             let updatedUser = await axios({
                 method: 'get',
-                url: 'http://142.93.218.227:8000/user/',
+                url: 'http://64.227.182.173:8000/user/',
                 withCredentials:true
             })
             setUser(updatedUser.data)
@@ -229,12 +229,12 @@ function FullScreenbook() {
             if(_.isEqual(bookmark.location, pageLocation)) {
                 let res = await axios({
                     method: 'delete',
-                    url: 'http://142.93.218.227:8000/bookmarks/'+bookmark.id+'/',
+                    url: 'http://64.227.182.173:8000/bookmarks/'+bookmark.id+'/',
                 });
                 if(res.status === 204) {
                     let updatedUser = await axios({
                         method: 'get',
-                        url: 'http://142.93.218.227:8000/user/',
+                        url: 'http://64.227.182.173:8000/user/',
                         withCredentials:true
                     })
                     setUser(updatedUser.data)
